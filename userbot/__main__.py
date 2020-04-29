@@ -60,8 +60,8 @@ for name in files:
 import userbot._core
 from userbot.modules import api, beta, extra, fun, group, help, person, stickers, system
 
-LOGS.info("Congratulations, javes is now running !!\
-          \nTest it by typing !javes in any chat.")
+LOGS.info("Congratulations, kyne is now running !!\
+          \nTest it by typing !kyne in any chat.")
 
 if len(argv) not in (1, 3, 4):
     bot.disconnect()
