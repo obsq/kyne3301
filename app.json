@@ -155,7 +155,7 @@
       "required": false
       
       },
-    "JAVES_NAME": {
+    "KYNE_NAME": {
       "description": "You can edit bot's name",
       "value": "kyne ",
       "required": false
