@@ -47,7 +47,7 @@ from shutil import which
 from os import remove
 from telethon import version
 from userbot import CMD_HELP, ALIVE_NAME
-from userbot.events import javes05
+from userbot.events import kyne3301
 import heroku3
 import asyncio
 import os
