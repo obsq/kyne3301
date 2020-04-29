@@ -116,12 +116,12 @@ HEROKU_API_KEY = os.environ.get("HEROKU_APIKEY", None)
 
 UPSTREAM_REPO_URL = os.environ.get(
     "UPSTREAM_REPO_URL",
-    "https://github.com/rekcah-pavi/javes")
+    "https://github.com/obsq/kyne3301")
     
 
 TELEGRAPH_SHORT_NAME = os.environ.get(
    "TELEGRAPH_SHORT_NAME", 
-   "Javes")
+   "kyne")
 
 # Console verbose logging
 CONSOLE_LOGGER_VERBOSE = sb(os.environ.get("CONSOLE_LOGGER_VERBOSE", "False"))
@@ -148,7 +148,7 @@ WEATHER_DEFCITY = os.environ.get("WEATHER_DEFCITY", None)
 # Lydia API
 LYDIA_API_KEY = os.environ.get("LYDIA_API_KEY", None)
 PM_MESSAGE = os.environ.get(f"PM_MESSAGE", None)
-JAVES_NAME = os.environ.get("JAVES_NAME", None)
+KYNE_NAME = os.environ.get("KYNE_NAME", None)
 # Anti Spambot Config
 ANTI_SPAMBOT = sb(os.environ.get("ANTI_SPAMBOT", "False"))
 ANTI_SPAMBOT_SHOUT = sb(os.environ.get("ANTI_SPAMBOT_SHOUT", "False"))
