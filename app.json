@@ -196,7 +196,7 @@
       "required": false
     },
     "YOUR_SHORT_NAME": {
-      "description": "Fill with your name show in !javes message!",
+      "description": "Fill with your name show in !kyne message!",
       "value": "your name",
       "required": true
       },
