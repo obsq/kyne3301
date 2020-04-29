@@ -1,4 +1,4 @@
-<h1 align="center">PROJECT 3301</h1>
+<h1 align="center">PROJECT kyne</h1>
 <h3 align="center">A modular customisable Telegram userbot running on Python </h3>
 <p align="center">&nbsp;</p>
 <h2 align="center">Instructions for Installation</h2>
