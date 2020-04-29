@@ -4,3 +4,5 @@
 <h2 align="center">Instructions for Installation</h2>
 <h5 align="center">Tap deploy in heroku! Join our telegram channel for guide https://t.me/3301official</h5>
 
+[![Deploy To Heroku](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
+
