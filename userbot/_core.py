@@ -1,6 +1,6 @@
 from userbot import bot
 from telethon import events
-from userbot.events import kyne3301, obsq, qsob, remove_plugin, load_module
+from userbot.events import kyne3301, obsq, qsbo, remove_plugin, load_module
 from var import Var
 import importlib
 from pathlib import Path
@@ -12,7 +12,7 @@ import os
 import userbot.events
 from datetime import datetime
 admin_cmd = obsq
-command = qsob
+command = qsbo
 register = kyne3301
 borg = bot
 DELETE_TIMEOUT = 5
