@@ -803,3 +803,68 @@ async def delete_it(delme):
 
 @kyne3301(outgoing=True, pattern="^\!edit")
 async def editer(edit):
+    """ For .editme command, edit your last message. """
+    message = edit.text
+    chat = await edit.get_input_chat()
+    self_id = await edit.client.get_peer_id('me')
+    string = str(message[6:])
+    i = 1
+    async for message in edit.client.iter_messages(chat, self_id):
+        if i == 2:
+            await message.edit(string)
+            await edit.delete()
+            break
+        i = i + 1
+    if BOTLOG:
+        await edit.client.send_message(BOTLOG_CHATID,
+                                       "Edit query was executed successfully")
+
+
+@kyne3301(outgoing=True, pattern="^\!sd")
+async def selfdestruct(destroy):
+    """ For .sd command, make seflf-destructable messages. """
+    message = destroy.text
+    counter = int(message[4:6])
+    text = str(destroy.text[6:])
+    await destroy.delete()
+    smsg = await destroy.client.send_message(destroy.chat_id, text)
+    await sleep(counter)
+    await smsg.delete()
+    if BOTLOG:
+        await destroy.client.send_message(BOTLOG_CHATID,
+                                          "sd query done successfully")
+
+@kyne3301(outgoing=True, pattern="^!name(?: |$)(.*)")
+async def _(event):
+ reply_message = await event.get_reply_message()
+ idd = reply_message.from_id
+ if idd == 710844948:
+  await reply_message.reply(f"`{KYNE_NNAME}: he is my master so i can't `")
+ else:
+    if event.fwd_from:
+        return 
+    if not event.reply_to_msg_id:
+       await event.edit("`Can't scan bot meaage`")
+       return
+    reply_message = await event.get_reply_message() 
+    if not reply_message.text:
+       await event.edit("```reply to a media message```")
+       return
+    chat = "@SangMataInfo_bot"
+    sender = reply_message.sender
+    if reply_message.sender.bot:
+       await event.edit("`Reply to actual users message.`")
+       return
+    await event.edit("` Hacking........`")
+    async with bot.conversation(chat) as conv:
+          try:     
+              response = conv.wait_event(events.NewMessage(incoming=True,from_users=461843263))
+              await bot.forward_messages(chat, reply_message)
+              response = await response 
+          except YouBlockedUserError: 
+              await event.reply("`Please unblock @sangmatainfo_bot and try again`")
+              return
+          if response.text.startswith("Forward"):
+             await event.edit("`Privacy error!`")
+          else: 
+             await event.edit(f"{response.message.message}")
