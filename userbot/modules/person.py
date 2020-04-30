@@ -784,7 +784,7 @@ async def purgeme(delme):
     await smsg.delete()
 
 
-@kyne(outgoing=True, pattern="^\!del$")
+@kyne3301(outgoing=True, pattern="^\!del$")
 async def delete_it(delme):
     """ For .del command, delete the replied message. """
     msg_src = await delme.get_reply_message()
