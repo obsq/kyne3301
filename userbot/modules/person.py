@@ -100,7 +100,7 @@ DEFAULTUSER = str(ALIVE_NAME) if ALIVE_NAME else uname().node
 PM_MESSAGE = str(PM_MESSAGE) if PM_MESSAGE else str(ORI_MSG)
 # ========================= CONSTANTS ============================
 UNAPPROVED_MSG = (
-   f"`{JAVES_NNAME}:`**{PM_MESSAGE}**")
+   f"`{KYNE_NNAME}:`**{PM_MESSAGE}**")
     
 
 @kyne3301(incoming=True, disable_edited=True, disable_errors=True)
@@ -148,10 +148,10 @@ async def permitpm(event):
 
                 if COUNT_PM[event.chat_id] == 3:
                     await event.respond(
-                             f"`{JAVES_NNAME}`: ** Dont spam my master's pm this is your last warning!!**")
+                             f"`{KYNE_NNAME}`: ** Dont spam my owner's pm this is your last warning!!**")
                 if COUNT_PM[event.chat_id] > 4:
                     await event.respond(
-                             f"`{JAVES_NNAME}`: ** {BLOCK_MMSG} **")        
+                             f"`{KYNE_NNAME}`: ** {BLOCK_MMSG} **")        
                 
 
                     try:
@@ -161,7 +161,7 @@ async def permitpm(event):
                         if BOTLOG:
                             await event.client.send_message(
                                 BOTLOG_CHATID,
-                                "Count PM is seemingly going retard, plis restart bot!",
+                                "Count PM is seemingly going retard, please restart bot!",
                             )
                         LOGS.info("CountPM wen't rarted boi")
                         return
@@ -180,7 +180,7 @@ async def permitpm(event):
                         )
 
 
-@javes05(disable_edited=True, outgoing=True, disable_errors=True)
+@kyne3301(disable_edited=True, outgoing=True, disable_errors=True)
 async def auto_accept(event):
     """ Will approve automatically if you texted them first. """
     if not PM_AUTO_BAN:
@@ -215,7 +215,7 @@ async def auto_accept(event):
                     )
 
 
-@javes05(outgoing=True, pattern="^\!notifoff$")
+@kyne3301(outgoing=True, pattern="^\!notifoff$")
 async def notifoff(noff_event):
     """ For .notifoff command, stop getting notifications from unapproved PMs. """
     try:
@@ -227,7 +227,7 @@ async def notifoff(noff_event):
     await noff_event.edit("`Notifications from unapproved PM's are silenced!`")
 
 
-@javes05(outgoing=True, pattern="^\!notifon$")
+@kyne3301(outgoing=True, pattern="^\!notifon$")
 async def notifon(non_event):
     """ For .notifoff command, get notifications from unapproved PMs. """
     try:
@@ -239,7 +239,7 @@ async def notifon(non_event):
     await non_event.edit("`Notifications from unapproved PM's unmuted!`")
 
 
-@javes05(outgoing=True, pattern="^\!allow$")
+@kyne3301(outgoing=True, pattern="^\!allow$")
 async def approvepm(apprvpm):
     """ For .approve command, give someone the permissions to PM you. """
     try:
