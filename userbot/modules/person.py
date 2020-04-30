@@ -249,3 +249,156 @@ async def approvepm(apprvpm):
         return
 
     if apprvpm.reply_to_msg_id:
+        reply = await apprvpm.get_reply_message()
+        replied_user = await apprvpm.client.get_entity(reply.from_id)
+        aname = replied_user.id
+        name0 = str(replied_user.first_name)
+        uid = replied_user.id
+
+    else:
+        aname = await apprvpm.client.get_entity(apprvpm.chat_id)
+        name0 = str(aname.first_name)
+        uid = apprvpm.chat_id
+
+    try:
+        approve(uid)
+    except IntegrityError:
+        await apprvpm.edit("You are allowed to pm!")
+        return
+
+    await apprvpm.edit(f"[{name0}](tg://user?id={uid}) `approved to PM!`")
+
+    async for message in apprvpm.client.iter_messages(apprvpm.chat_id,
+                                                      from_user='me',
+                                                      search=UNAPPROVED_MSG):
+        await message.delete()
+
+    if BOTLOG:
+        await apprvpm.client.send_message(
+            BOTLOG_CHATID,
+            "#APPROVED\n" + "User: " + f"[{name0}](tg://user?id={uid})",
+        )
+
+
+@kyne3301(outgoing=True, pattern="^\!disallow$")
+async def disapprovepm(disapprvpm):
+    try:
+        from userbot.modules.sql_helper.pm_permit_sql import dissprove
+    except BaseException:
+        await disapprvpm.edit("`Running on Non-SQL mode!`")
+        return
+
+    if disapprvpm.reply_to_msg_id:
+        reply = await disapprvpm.get_reply_message()
+        replied_user = await disapprvpm.client.get_entity(reply.from_id)
+        aname = replied_user.id
+        name0 = str(replied_user.first_name)
+        dissprove(replied_user.id)
+    else:
+        dissprove(disapprvpm.chat_id)
+        aname = await disapprvpm.client.get_entity(disapprvpm.chat_id)
+        name0 = str(aname.first_name)
+
+    await disapprvpm.edit(
+        f"[{name0}](tg://user?id={disapprvpm.chat_id}) ` Disaproved to PM!`")
+
+    if BOTLOG:
+        await disapprvpm.client.send_message(
+            BOTLOG_CHATID,
+            f"[{name0}](tg://user?id={disapprvpm.chat_id})"
+            " was disapproved to PM you.",
+        )
+
+
+@kyne3301(outgoing=True, pattern="^\!block$")
+async def blockpm(block):
+    """ For .block command, block people from PMing you! """
+    if block.reply_to_msg_id:
+        reply = await block.get_reply_message()
+        replied_user = await block.client.get_entity(reply.from_id)
+        aname = replied_user.id
+        name0 = str(replied_user.first_name)
+        await block.client(BlockRequest(replied_user.id))
+        await block.edit(f"`{KYNE_NNAME}: You've been blocked!`")
+        uid = replied_user.id
+    else:
+        await block.client(BlockRequest(block.chat_id))
+        aname = await block.client.get_entity(block.chat_id)
+        await block.edit(f"`{KYNE_NNAME}: You've been blocked!`")
+        name0 = str(aname.first_name)
+        uid = block.chat_id
+
+    try:
+        from userbot.modules.sql_helper.pm_permit_sql import dissprove
+        dissprove(uid)
+    except AttributeError:
+        pass
+
+    if BOTLOG:
+        await block.client.send_message(
+            BOTLOG_CHATID,
+            "#BLOCKED\n" + "User: " + f"[{name0}](tg://user?id={uid})",
+        )
+
+
+@kyne3301(outgoing=True, pattern="^\!unblock$")
+async def unblockpm(unblock):
+    """ For .unblock command, let people PMing you again! """
+    if unblock.reply_to_msg_id:
+        reply = await unblock.get_reply_message()
+        replied_user = await unblock.client.get_entity(reply.from_id)
+        name0 = str(replied_user.first_name)
+        await unblock.client(UnblockRequest(replied_user.id))
+        await unblock.edit(f"`{KYNE_NNAME}: You have been unblocked.`")
+
+    if BOTLOG:
+        await unblock.client.send_message(
+            BOTLOG_CHATID,
+            f"[{name0}](tg://user?id={replied_user.id})"
+            " was unblocked!.",
+        )
+
+""" Userbot module which contains afk-related commands """
+
+
+
+try:
+    from userbot.modules.sql_helper.globals import gvarstatus, addgvar, delgvar
+    afk_db = True
+except AttributeError:
+    afk_db = False
+
+# ========================= CONSTANTS ============================
+AFKSTR = [f"`{KYNE_NNAME}:` ** {AFK_MMSG} **"]
+
+global USER_AFK  # pylint:disable=E0602
+global afk_time  # pylint:disable=E0602
+global afk_start
+global afk_end
+USER_AFK = {}
+afk_time = None
+afk_start = {}
+
+# =================================================================
+@kyne3301(outgoing=True, pattern="^!afk(?: |$)(.*)", disable_errors=True)
+async def set_afk(afk_e):
+    """ For .afk command, allows you to inform people that you are afk when they message you """
+    message = afk_e.text
+    string = afk_e.pattern_match.group(1)
+    global ISAFK
+    global AFKREASON
+    global USER_AFK  # pylint:disable=E0602
+    global afk_time  # pylint:disable=E0602
+    global afk_start
+    global afk_end
+    global reason
+    USER_AFK = {}
+    afk_time = None
+    afk_end = {}
+    start_1 = datetime.now()
+    afk_start = start_1.replace(microsecond=0)
+    if string:
+        AFKREASON = string
+        await afk_e.edit(f"Going Away From Virtual World!\
+        \nReason: `{string}`")
+    else:
