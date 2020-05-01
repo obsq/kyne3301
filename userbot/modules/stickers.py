@@ -530,3 +530,275 @@ async def _(event):
           except YouBlockedUserError: 
               await event.reply(f"`{KYNE_NNAME}`: **Please unblock @BuildStickerBot and try again**")
               
+@kyne3301(outgoing=True, disable_errors=True, pattern="^!fry(?: |$)(.*)")
+async def _(event):
+    if event.fwd_from:
+        return 
+    if not event.reply_to_msg_id:
+       await event.edit(f"`{KYNE_NNAME}: ` **Reply to a sticker**")
+       return
+    reply_message = await event.get_reply_message() 
+    if not reply_message.media:
+       await event.edit(f"`{KYNE_NNAME}: ` **Reply to a sticker**")
+       return
+    chat = "@image_deepfrybot"
+    sender = reply_message.sender
+    if reply_message.sender.bot:
+       await event.edit(f"`{KYNE_NNAME}: ` **Reply to actual users message.***")
+       return
+    await event.edit(f"`{KYNE_NNAME}: ` **Frying image...**")
+    async with bot.conversation(chat) as conv:
+          try:     
+              await conv.send_message("/start")
+              response2 = await conv.get_response()     
+              if response2.text.startswith("**How to use**"):      
+                 await asyncio.sleep(0.3)
+                 #await event.delete()
+                 response = conv.wait_event(events.NewMessage(incoming=True,from_users=432858024))
+                 await bot.forward_messages(chat, reply_message)
+                 response = await response 
+                 #await event.reply(f"`{KYNE_NNAME}`: **Converted @{sender.username}'s photo Sucessfully**")
+                 if response.text.startswith("I"):               
+                    await event.edit(f"`{KYNE_NNAME}`: **Sorry, Failed to decode this \n try use alternative way !fry2**")
+                 else:
+          	        await bot.send_file(event.chat_id, response.message.media)                           
+              else:
+              	await event.edit(f"`{KYNE_NNAME}`: **Sorry, currently this command in maintaince..... please try later \nOr use alternative way !fry2**")             	      
+          except YouBlockedUserError: 
+              await event.reply(f"`{KYNE_NNAME}: `**Please unblock @image_deepfrybot and try again**")
+   
+
+
+@kyne.on(obsq(pattern=f"kang", allow_sudo=True))
+async def kang(args):
+    """ For .kang command, kangs stickers or creates new ones. """
+    kang_meme = random.choice(KANGING_STR)
+    user = await bot.get_me()
+    if not user.username:
+        user.username = user.first_name
+    message = await args.get_reply_message()
+    photo = None
+    emojibypass = False
+    is_anim = False
+    emoji = None
+
+    if message and message.media:
+        if isinstance(message.media, MessageMediaPhoto):
+            #await args.reply(f"`{kang_meme}`")
+            photo = io.BytesIO()
+            photo = await bot.download_media(message.photo, photo)
+        elif "image" in message.media.document.mime_type.split('/'):
+            await args.reply(f"`{kang_meme}`")
+            photo = io.BytesIO()
+            await bot.download_file(message.media.document, photo)
+            if (DocumentAttributeFilename(file_name='sticker.webp') in
+                    message.media.document.attributes):
+                emoji = message.media.document.attributes[1].alt
+                emojibypass = True
+        elif "tgsticker" in message.media.document.mime_type:
+            await args.reply(f"`{kang_meme}`")
+            await bot.download_file(message.media.document,
+                                    'AnimatedSticker.tgs')
+
+            attributes = message.media.document.attributes
+            for attribute in attributes:
+                if isinstance(attribute, DocumentAttributeSticker):
+                    emoji = attribute.alt
+
+            emojibypass = True
+            is_anim = True
+            photo = 1
+        else:
+            await args.reply("`Unsupported File!`")
+            return
+    else:
+        await args.reply("`I can't kang that...`")
+        return
+
+    if photo:
+        splat = args.text.split()
+        if not emojibypass:
+            emoji = "🤔"
+        pack = 1
+        if len(splat) == 3:
+            pack = splat[2]  # User sent both
+            emoji = splat[1]
+        elif len(splat) == 2:
+            if splat[1].isnumeric():
+                # User wants to push into different pack, but is okay with
+                # thonk as emote.
+                pack = int(splat[1])
+            else:
+                # User sent just custom emote, wants to push to default
+                # pack
+                emoji = splat[1]
+
+        packname = f"a{user.id}_by_{user.username}_{pack}"
+        packnick = f"@{user.username}'s pack Vol.{pack}"
+        cmd = '/newpack'
+        file = io.BytesIO()
+
+        if not is_anim:
+            image = await resize_photo(photo)
+            file.name = "sticker.png"
+            image.save(file, "PNG")
+        else:
+            packname += "_anim"
+            packnick += " (Animated)"
+            cmd = '/newanimated'
+
+        response = urllib.request.urlopen(
+            urllib.request.Request(f'http://t.me/addstickers/{packname}'))
+        htmlstr = response.read().decode("utf8").split('\n')
+
+        if "  A <strong>Telegram</strong> user has created the <strong>Sticker&nbsp;Set</strong>." not in htmlstr:
+            async with bot.conversation('Stickers') as conv:
+                await conv.send_message('/addsticker')
+                await conv.get_response()
+                # Ensure user doesn't get spamming notifications
+                await bot.send_read_acknowledge(conv.chat_id)
+                await conv.send_message(packname)
+                x = await conv.get_response()
+                while x.text == PACK_FULL:
+                    pack += 1
+                    packname = f"a{user.id}_by_{user.username}_{pack}"
+                    packnick = f"@{user.username}'s pack Vol.{pack}"
+                    await args.reply(f"`{kang_meme}\
+                    \nMoving on to Vol.{str(pack)}..`")
+                    await conv.send_message(packname)
+                    x = await conv.get_response()
+                    if x.text == "Invalid pack selected.":
+                        await conv.send_message(cmd)
+                        await conv.get_response()
+                        # Ensure user doesn't get spamming notifications
+                        await bot.send_read_acknowledge(conv.chat_id)
+                        await conv.send_message(packnick)
+                        await conv.get_response()
+                        # Ensure user doesn't get spamming notifications
+                        await bot.send_read_acknowledge(conv.chat_id)
+                        if is_anim:
+                            await conv.send_file('AnimatedSticker.tgs')
+                            remove('AnimatedSticker.tgs')
+                        else:
+                            file.seek(0)
+                            await conv.send_file(file, force_document=True)
+                        await conv.get_response()
+                        await conv.send_message(emoji)
+                        # Ensure user doesn't get spamming notifications
+                        await bot.send_read_acknowledge(conv.chat_id)
+                        await conv.get_response()
+                        await conv.send_message("/publish")
+                        if is_anim:
+                            await conv.get_response()
+                            await conv.send_message(f"<{packnick}>")
+                        # Ensure user doesn't get spamming notifications
+                        await conv.get_response()
+                        await bot.send_read_acknowledge(conv.chat_id)
+                        await conv.send_message("/skip")
+                        # Ensure user doesn't get spamming notifications
+                        await bot.send_read_acknowledge(conv.chat_id)
+                        await conv.get_response()
+                        await conv.send_message(packname)
+                        # Ensure user doesn't get spamming notifications
+                        await bot.send_read_acknowledge(conv.chat_id)
+                        await conv.get_response()
+                        # Ensure user doesn't get spamming notifications
+                        await bot.send_read_acknowledge(conv.chat_id)
+                        await args.reply(f"`Haha, yes. New kang pack unlocked!\
+                            \nPack can be found [here](t.me/addstickers/{packname})",
+                                        parse_mode='md')
+                        return
+                if is_anim:
+                    await conv.send_file('AnimatedSticker.tgs')
+                    remove('AnimatedSticker.tgs')
+                else:
+                    file.seek(0)
+                    await conv.send_file(file, force_document=True)
+                rsp = await conv.get_response()
+                if "Sorry, the file type is invalid." in rsp.text:
+                    await args.reply(
+                        "`Failed to add sticker, use` @Stickers `bot to add the sticker manually.`"
+                    )
+                    return
+                await conv.send_message(emoji)
+                # Ensure user doesn't get spamming notifications
+                await bot.send_read_acknowledge(conv.chat_id)
+                await conv.get_response()
+                await conv.send_message('/done')
+                await conv.get_response()
+                # Ensure user doesn't get spamming notifications
+                await bot.send_read_acknowledge(conv.chat_id)
+        else:
+            await args.reply(f"`{KYNE_NNAME}`: **Brewing a new Pack...**")
+            async with bot.conversation('Stickers') as conv:
+                await conv.send_message(cmd)
+                await conv.get_response()
+                # Ensure user doesn't get spamming notifications
+                await bot.send_read_acknowledge(conv.chat_id)
+                await conv.send_message(packnick)
+                await conv.get_response()
+                # Ensure user doesn't get spamming notifications
+                await bot.send_read_acknowledge(conv.chat_id)
+                if is_anim:
+                    await conv.send_file('AnimatedSticker.tgs')
+                    remove('AnimatedSticker.tgs')
+                else:
+                    file.seek(0)
+                    await conv.send_file(file, force_document=True)
+                rsp = await conv.get_response()
+                if "Sorry, the file type is invalid." in rsp.text:
+                    await args.reply(
+                        "`Failed to add sticker, use` @Stickers `bot to add the sticker manually.`"
+                    )
+                    return
+                await conv.send_message(emoji)
+                # Ensure user doesn't get spamming notifications
+                await bot.send_read_acknowledge(conv.chat_id)
+                await conv.get_response()
+                await conv.send_message("/publish")
+                if is_anim:
+                    await conv.get_response()
+                    await conv.send_message(f"<{packnick}>")
+                # Ensure user doesn't get spamming notifications
+                await conv.get_response()
+                await bot.send_read_acknowledge(conv.chat_id)
+                await conv.send_message("/skip")
+                # Ensure user doesn't get spamming notifications
+                await bot.send_read_acknowledge(conv.chat_id)
+                await conv.get_response()
+                await conv.send_message(packname)
+                # Ensure user doesn't get spamming notifications
+                await bot.send_read_acknowledge(conv.chat_id)
+                await conv.get_response()
+                # Ensure user doesn't get spamming notifications
+                await bot.send_read_acknowledge(conv.chat_id)
+
+        await args.reply(f"`{KYNE_NNAME}`: **Sticker kanged successfully!**\
+            \nPack can be found [here](t.me/addstickers/{packname})",
+                        parse_mode='md')
+
+
+async def resize_photo(photo):
+    """ Resize the given photo to 512x512 """
+    image = Image.open(photo)
+    maxsize = (512, 512)
+    if (image.width and image.height) < 512:
+        size1 = image.width
+        size2 = image.height
+        if image.width > image.height:
+            scale = 512 / size1
+            size1new = 512
+            size2new = size2 * scale
+        else:
+            scale = 512 / size2
+            size1new = size1 * scale
+            size2new = 512
+        size1new = math.floor(size1new)
+        size2new = math.floor(size2new)
+        sizenew = (size1new, size2new)
+        image = image.resize(sizenew)
+    else:
+        image.thumbnail(maxsize)
+
+    return image
+
