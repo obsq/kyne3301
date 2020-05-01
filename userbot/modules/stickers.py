@@ -841,12 +841,12 @@ async def _(event):
 @kyne.on(obsq(pattern=f"stickerinfo$", allow_sudo=True))
 async def get_pack_info(event):
     if not event.is_reply:
-        await event.reply(f"`{JAVES_NNAME}`: **Reply to a sticker to get the pack details*")
+        await event.reply(f"`{KYNE_NNAME}`: **Reply to a sticker to get the pack details*")
         return
 
     rep_msg = await event.get_reply_message()
     if not rep_msg.document:
-        await event.reply(f"`{JAVES_NNAME}`: **Reply to a sticker to get the pack details**")
+        await event.reply(f"`{KYNE_NNAME}`: **Reply to a sticker to get the pack details**")
         return
 
     try:
@@ -858,7 +858,7 @@ async def get_pack_info(event):
         return
 
     if not isinstance(stickerset_attr, DocumentAttributeSticker):
-        await event.reply(f"`{JAVES_NNAME}`: **This is not a sticker. Reply to a sticker.**")
+        await event.reply(f"`{KYNE_NNAME}`: **This is not a sticker. Reply to a sticker.**")
         return
 
     get_stickerset = await bot(
@@ -880,23 +880,23 @@ async def get_pack_info(event):
 
     await event.reply(OUTPUT)
 
-@javes.on(rekcah05(pattern=f"ss(?: |$)(.*)", allow_sudo=True))
+@kyne.on(obsq(pattern=f"ss(?: |$)(.*)", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return 
     if not event.reply_to_msg_id:
-       await event.reply(f"`{JAVES_NNAME}`: **Reply to any user message.**")
+       await event.reply(f"`{KYNE_NNAME}`: **Reply to any user message.**")
        return
     reply_message = await event.get_reply_message() 
     if not reply_message.text:
-       await event.reply(f"`{JAVES_NNAME}`: **Reply to text message**")
+       await event.reply(f"`{KYNE_NNAME}`: **Reply to text message**")
        return
     chat = "@QuotLyBot"
     sender = reply_message.sender
     if reply_message.sender.bot:
-       await event.reply(f"`{JAVES_NNAME}`: **Reply to actual users message**")
+       await event.reply(f"`{KYNE_NNAME}`: **Reply to actual users message**")
        return
-    await event.reply(f"`{JAVES_NNAME}`: ** Processing user chat to Sticker **")
+    await event.reply(f"`{KYNE_NNAME}`: ** Processing user chat to Sticker **")
     async with bot.conversation(chat) as conv:
           try:                
               await conv.send_message("/start")
@@ -907,15 +907,15 @@ async def _(event):
                  response = conv.wait_event(events.NewMessage(incoming=True,from_users=1031952739))                 
                  await bot.forward_messages(chat, reply_message)
                  response = await response 
-                 #await event.reply(f"`{JAVES_NNAME}`: **Converted @{sender.username}'s** ` {reply_message.message} `**message to Sticker Sucessfully**")
+                 #await event.reply(f"`{KYNE_NNAME}`: **Converted @{sender.username}'s** ` {reply_message.message} `**message to Sticker Sucessfully**")
                  if response.text.startswith("Command"):
-                    await event.reply(f"`{JAVES_NNAME}`: **Sorry, I Failed to convert it**")
+                    await event.reply(f"`{KYNE_NNAME}`: **Sorry, I Failed to convert it**")
                  else:                        
           	         await bot.send_file(event.chat_id, response.message.media)                               
               else:
-              	await event.reply(f"`{JAVES_NNAME}`: **Sorry, currently this command in maintaince..... please try later **")             	      
+              	await event.reply(f"`{KYNE_NNAME}`: **Sorry, currently this command in maintaince..... please try later **")             	      
           except YouBlockedUserError:          	
-              await event.reply(f"`{JAVES_NNAME}`: **Please unblock @QuotLyBot and try again**")
+              await event.reply(f"`{KYNE_NNAME}`: **Please unblock @QuotLyBot and try again**")
               
           
           		
@@ -924,7 +924,7 @@ async def _(event):
 
 
 
-@javes.on(rekcah05(pattern=f"text (?:(.*?) \| )?(.*)", allow_sudo=True))
+@kyne.on(obsq(pattern=f"text (?:(.*?) \| )?(.*)", allow_sudo=True))
 async def sticklet(event):
     R = random.randint(0,256)
     G = random.randint(0,256)
@@ -940,7 +940,7 @@ async def sticklet(event):
         reply_message = await event.get_reply_message()
         sticktext = reply_message.message
     elif not sticktext:
-        await event.reply(f"`{JAVES_NNAME}`: **need something **")
+        await event.reply(f"`{KYNE_NNAME}`: **need something **")
         return
     if event.reply_to_msg_id:
         reply_message = await event.get_reply_message()
@@ -954,7 +954,7 @@ async def sticklet(event):
     image = Image.new("RGBA", (512, 512), (255, 255, 255, 0))
     draw = ImageDraw.Draw(image)
     fontsize = 230
-    FONT_FILE = await get_font_file(event.client, "@javespl", font_file_name)
+    FONT_FILE = await get_font_file(event.client, "@kynepl", font_file_name)
     font = ImageFont.truetype(FONT_FILE, size=fontsize)
     while draw.multiline_textsize(sticktext, font=font) > (512, 512):
         fontsize -= 3
@@ -962,11 +962,11 @@ async def sticklet(event):
     width, height = draw.multiline_textsize(sticktext, font=font)
     draw.multiline_text(((512-width)/2,(512-height)/2), sticktext, font=font, fill=(R, G, B))
     image_stream = io.BytesIO()
-    image_stream.name = "javes.webp"
+    image_stream.name = "kyne.webp"
     image.save(image_stream, "WebP")
     image_stream.seek(0)
     # finally, reply the sticker
-    await event.client.send_file(event.chat_id, image_stream, caption="Javes", reply_to=event.message.reply_to_msg_id)
+    await event.client.send_file(event.chat_id, image_stream, caption="kyne", reply_to=event.message.reply_to_msg_id)
     # cleanup
     try:
         os.remove(FONT_FILE)
@@ -989,23 +989,23 @@ async def get_font_file(client, channel_id, search_kw=""):
     return await client.download_media(font_file_message)
 
 
-@javes.on(rekcah05(pattern=f"ss3(?: |$)(.*)", allow_sudo=True))
+@kyne.on(obsq(pattern=f"ss3(?: |$)(.*)", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return 
     if not event.reply_to_msg_id:
-       await event.reply(f"`{JAVES_NNAME}`: **Reply to a Photo/sticker**")
+       await event.reply(f"`{KYNE_NNAME}`: **Reply to a Photo/sticker**")
        return
     reply_message = await event.get_reply_message() 
     if not reply_message.media:
-       await event.reply(f"`{JAVES_NNAME}`: **Reply to a photo/sticker**")
+       await event.reply(f"`{KYNE_NNAME}`: **Reply to a photo/sticker**")
        return
     chat = "@Stickerdownloadbot"
     sender = reply_message.sender
     if reply_message.sender.bot:
-       await event.reply(f"`{JAVES_NNAME}`: **Reply to actual users message.**")
+       await event.reply(f"`{KYNE_NNAME}`: **Reply to actual users message.**")
        return
-    await event.reply(f"`{JAVES_NNAME}`: **converting .........**")
+    await event.reply(f"`{KYNE_NNAME}`: **converting .........**")
     async with bot.conversation(chat) as conv:
           try:                
               await conv.send_message("/start")
@@ -1016,37 +1016,37 @@ async def _(event):
                  response = conv.wait_event(events.NewMessage(incoming=True,from_users=220255550))
                  await bot.forward_messages(chat, reply_message)
                  response = await response 
-                 #await event.reply(f"`{JAVES_NNAME}`: **Converted @{sender.username}'s photo Sucessfully**")
+                 #await event.reply(f"`{KYNE_NNAME}`: **Converted @{sender.username}'s photo Sucessfully**")
                  if response.text.startswith("I"):               
-                    await event.reply(f"`{JAVES_NNAME}`: **Sorry, Failed to decode this \n try use alternative way !ss2**")
+                    await event.reply(f"`{KYNE_NNAME}`: **Sorry, Failed to decode this \n try use alternative way !ss2**")
                  else:
           	        await bot.send_file(event.chat_id, response.message.media)      
                  await conv.get_response()
-                 rk1 = await conv.get_response()
+                 oq1 = await conv.get_response()
                  await bot.send_file(event.chat_id, rk1)                 
               else:
-              	await event.reply(f"`{JAVES_NNAME}`: **Sorry, currently this command in maintaince..... please try later \nOr use alternative way !ss2  **")             	      
+              	await event.reply(f"`{KYNE_NNAME}`: **Sorry, currently this command in maintaince..... please try later \nOr use alternative way !ss2  **")             	      
           except YouBlockedUserError: 
-              await event.reply(f"`{JAVES_NNAME}`: **Please unblock @BuildStickerBot and try again**")
+              await event.reply(f"`{KYNE_NNAME}`: **Please unblock @BuildStickerBot and try again**")
               
               
-@javes.on(rekcah05(pattern=f"fry(?: |$)(.*)", allow_sudo=True))              
+@kyne.on(obsq(pattern=f"fry(?: |$)(.*)", allow_sudo=True))              
 async def _(event):
     if event.fwd_from:
         return 
     if not event.reply_to_msg_id:
-       await event.reply(f"`{JAVES_NNAME}: ` **Reply to a sticker**")
+       await event.reply(f"`{KYNE_NNAME}: ` **Reply to a sticker**")
        return
     reply_message = await event.get_reply_message() 
     if not reply_message.media:
-       await event.reply(f"`{JAVES_NNAME}: ` **Reply to a sticker**")
+       await event.reply(f"`{KYNE_NNAME}: ` **Reply to a sticker**")
        return
     chat = "@image_deepfrybot"
     sender = reply_message.sender
     if reply_message.sender.bot:
-       await event.reply(f"`{JAVES_NNAME}: ` **Reply to actual users message.***")
+       await event.reply(f"`{KYNE_NNAME}: ` **Reply to actual users message.***")
        return
-    await event.reply(f"`{JAVES_NNAME}: ` **Frying image...**")
+    await event.reply(f"`{KYNE_NNAME}: ` **Frying image...**")
     async with bot.conversation(chat) as conv:
           try:     
               await conv.send_message("/start")
@@ -1057,13 +1057,13 @@ async def _(event):
                  response = conv.wait_event(events.NewMessage(incoming=True,from_users=432858024))
                  await bot.forward_messages(chat, reply_message)
                  response = await response 
-                 #await event.reply(f"`{JAVES_NNAME}`: **Converted @{sender.username}'s photo Sucessfully**")
+                 #await event.reply(f"`{KYNE_NNAME}`: **Converted @{sender.username}'s photo Sucessfully**")
                  if response.text.startswith("I"):               
-                    await event.reply(f"`{JAVES_NNAME}`: **Sorry, Failed to decode this \n try use alternative way !fry2**")
+                    await event.reply(f"`{KYNE_NNAME}`: **Sorry, Failed to decode this \n try use alternative way !fry2**")
                  else:
           	        await bot.send_file(event.chat_id, response.message.media)                           
               else:
-              	await event.reply(f"`{JAVES_NNAME}`: **Sorry, currently this command in maintaince..... please try later \nOr use alternative way !fry2**")             	      
+              	await event.reply(f"`{KYNE_NNAME}`: **Sorry, currently this command in maintaince..... please try later \nOr use alternative way !fry2**")             	      
           except YouBlockedUserError: 
-              await event.reply(f"`{JAVES_NNAME}: `**Please unblock @image_deepfrybot and try again**")
+              await event.reply(f"`{KYNE_NNAME}: `**Please unblock @image_deepfrybot and try again**")
    
