@@ -36,11 +36,11 @@ from telethon.tl.types import InputMessagesFilterDocument
 from telethon.tl.functions.messages import GetStickerSetRequest
 from telethon.tl.types import InputStickerSetID
 from telethon.tl.types import DocumentAttributeSticker
-from userbot import CMD_HELP, ALIVE_NAME, PM_MESSAGE, JAVES_NAME, JAVES_MSG, ORI_MSG
-JAVES_NNAME = str(JAVES_NAME) if JAVES_NAME else str(JAVES_MSG)
+from userbot import CMD_HELP, ALIVE_NAME, PM_MESSAGE, KYNE_NAME, KYNE_MSG, ORI_MSG
+KYNE_NNAME = str(KYNE_NAME) if KYNE_NAME else str(KYNE_MSG)
 PACK_FULL = "Whoa! That's probably enough stickers for one pack, give it a break. \
 A pack can't have more than 120 stickers at the moment."
-javes = bot
+kyne = bot
 KANGING_STR = [
     
     "Kanging this sticker...",
@@ -51,7 +51,7 @@ KANGING_STR = [
 ]
 
 
-@javes05(outgoing=True, pattern="^\!kang")
+@kyne3301(outgoing=True, pattern="^\!kang")
 async def kang(args):
     """ For .kang command, kangs stickers or creates new ones. """
     kang_meme = random.choice(KANGING_STR)
