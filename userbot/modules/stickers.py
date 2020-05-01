@@ -802,7 +802,7 @@ async def resize_photo(photo):
 
     return image
 
-@kyne3301.on(rekcah05(pattern=f"ss2(?: |$)(.*)", allow_sudo=True))
+@kyne.on(rekcah05(pattern=f"ss2(?: |$)(.*)", allow_sudo=True))
 async def _(event):
     if event.fwd_from:
         return 
