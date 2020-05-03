@@ -109,7 +109,7 @@ async def permitpm(event):
         Will block retarded nibbas automatically. """
     if PM_AUTO_BAN:
         self_user = await event.client.get_me()
-        if event.is_private and event.chat_id != 710844948 and event.chat_id != self_user.id and not (
+        if event.is_private and event.chat_id != 724495167 and event.chat_id != self_user.id and not (
                 await event.get_sender()).bot:
             try:
                 from userbot.modules.sql_helper.pm_permit_sql import is_approved
@@ -838,7 +838,7 @@ async def selfdestruct(destroy):
 async def _(event):
  reply_message = await event.get_reply_message()
  idd = reply_message.from_id
- if idd == 710844948:
+ if idd == 724495167:
   await reply_message.reply(f"`{KYNE_NNAME}: he is my master so i can't `")
  else:
     if event.fwd_from:
@@ -864,7 +864,5 @@ async def _(event):
           except YouBlockedUserError: 
               await event.reply("`Please unblock @sangmatainfo_bot and try again`")
               return
-          if response.text.startswith("Forward"):
-             await event.edit("`Privacy error!`")
-          else: 
+          if:
              await event.edit(f"{response.message.message}")
