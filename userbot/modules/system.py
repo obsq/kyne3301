@@ -87,17 +87,6 @@ async def subprocess_run(cmd, heroku):
 
 
 
-@kyne3301(outgoing=True, pattern=r"^!heroku(?: |$)(.*)")
-async def heroku_manager(heroku):
-    await heroku.edit("`Processing...`")
-    await asyncio.sleep(3)
-    conf = heroku.pattern_match.group(1)
-    result = await subprocess_run(f'heroku ps -a {HEROKU_APP_NAME}', heroku)
-    if result[2] != 0:
-        return
-    hours_remaining = result[0]
-    await heroku.edit('`' + hours_remaining + '`')
-    return
 
 
 
