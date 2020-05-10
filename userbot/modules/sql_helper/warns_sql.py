@@ -1,3 +1,10 @@
+
+try:
+    from userbot.modules.sql_helper import SESSION, BASE
+except ImportError:
+    raise AttributeError
+
+from sqlalchemy import Column, String
 import threading
 from sqlalchemy import Integer, Column, String, UnicodeText, func, distinct, Boolean
 import os
