@@ -89,12 +89,6 @@ from telethon.tl.functions.messages import EditChatDefaultBannedRightsRequest
 from telethon.tl.types import ChatBannedRights
 from userbot import CMD_HELP
 from userbot import CMD_HELP, ALIVE_NAME, PM_MESSAGE, KYNE_NAME, KYNE_MSG, ORI_MSGKYNE_NNAME = str(KYNE_NAME) if KYNE_NAME else str(KYNE_MSG)
-import subprocess
-from telethon.errors import MessageEmptyError, MessageTooLongError, MessageNotModifiedError
-import glob
-import io
-import os
-i
 kyne = bot
 # =================== CONSTANT ===================
 PP_TOO_SMOL = f"`{KYNE_NNAME}:`**The image is too small**"
@@ -143,47 +137,6 @@ TYPE_TEXT = 0
 TYPE_PHOTO = 1
 TYPE_DOCUMENT = 2
 
-import os
-try:
- import instantmusic , subprocess
-except:
- os.system("pip install instantmusic")
- 
-
-
-os.system("rm -rf *.mp3")
-
-
-def bruh(name):
-    
-    os.system("instantmusic -q -s "+name)
-    
-
-@kyne.on(obsq(pattern=f"song ?(.*)"))
-async def _(event):
-    if event.fwd_from:
-        return
-    DELAY_BETWEEN_EDITS = 0.3
-    PROCESS_RUN_TIME = 100
-    cmd = event.pattern_match.group(1)
-    reply_to_id = event.message.id
-    if event.reply_to_msg_id:
-        reply_to_id = event.reply_to_msg_id
-    await event.edit("ok finding the song")    
-    bruh(str(cmd))
-    l = glob.glob("*.mp3")
-    loa = l[0]
-    await event.edit("sending song")
-    await borg.send_file(
-                event.chat_id,
-                loa,
-                force_document=True,
-                allow_cache=False,
-                caption=cmd,
-                reply_to=reply_to_id
-            )
-    os.system("rm -rf *.mp3")
-    subprocess.check_output("rm -rf *.mp3",shell=True)
 
 
 global last_triggered_oqfilters
