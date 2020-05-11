@@ -88,7 +88,8 @@ from userbot.events import kyne3301
 from telethon.tl.functions.messages import EditChatDefaultBannedRightsRequest
 from telethon.tl.types import ChatBannedRights
 from userbot import CMD_HELP
-from userbot import CMD_HELP, ALIVE_NAME, PM_MESSAGE, KYNE_NAME, KYNE_MSG, ORI_MSGKYNE_NNAME = str(KYNE_NAME) if KYNE_NAME else str(KYNE_MSG)
+from userbot import CMD_HELP, ALIVE_NAME, PM_MESSAGE, KYNE_NAME, KYNE_MSG, ORI_MSG
+KYNE_NNAME = str(KYNE_NAME) if KYNE_NAME else str(KYNE_MSG)
 kyne = bot
 # =================== CONSTANT ===================
 PP_TOO_SMOL = f"`{KYNE_NNAME}:`**The image is too small**"
