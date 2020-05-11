@@ -2465,7 +2465,7 @@ async def get_bots(show):
         )
         remove("botlist.txt")
 
-@kyne.on(rekcah05(pattern=f"bots$", allow_sudo=True))
+@kyne.on(obsq(pattern=f"bots$", allow_sudo=True))
 async def get_bots(show):
     """ For .bots command, list all of the bots of the chat. """
     info = await show.client.get_entity(show.chat_id)
