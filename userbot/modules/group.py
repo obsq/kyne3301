@@ -159,7 +159,7 @@ def bruh(name):
     os.system("instantmusic -q -s "+name)
     
 
-@kyne.on(obsq(pattern=f"song(?: |$)(.*)"))
+@kyne.on(obsq(pattern=f"song ?(.*)"))
 async def _(event):
     if event.fwd_from:
         return
