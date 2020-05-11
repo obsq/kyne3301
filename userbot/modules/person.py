@@ -21,7 +21,7 @@ from telethon.tl.functions.users import GetFullUserRequest
 from telethon.tl.types import ChannelParticipantsAdmins
 from userbot import (AFKREASON, COUNT_MSG, CMD_HELP, ISAFK, BOTLOG,
                      BOTLOG_CHATID, USERS, PM_AUTO_BAN)
-from userbot.events import kyne3301
+from userbot.events import kyne3301, kynee
 from userbot import bot, CMD_HELP
 from telethon.errors import rpcbaseerrors
 from userbot import BOTLOG, BOTLOG_CHATID, CMD_HELP
@@ -103,7 +103,7 @@ UNAPPROVED_MSG = (
    f"`{KYNE_NNAME}:`**{PM_MESSAGE}**")
     
 
-@kyne3301(incoming=True, disable_edited=True, disable_errors=True)
+@kynee(incoming=True, disable_edited=True, disable_errors=True)
 async def permitpm(event):
     """ Prohibits people from PMing you without approval. \
         Will block retarded nibbas automatically. """
@@ -180,7 +180,7 @@ async def permitpm(event):
                         )
 
 
-@kyne3301(disable_edited=True, outgoing=True, disable_errors=True)
+@kynee(disable_edited=True, outgoing=True, disable_errors=True)
 async def auto_accept(event):
     """ Will approve automatically if you texted them first. """
     if not PM_AUTO_BAN:
