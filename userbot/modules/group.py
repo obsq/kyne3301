@@ -3012,7 +3012,7 @@ async def filters_active(event):
     await event.edit(transact)
 
 
-@kyne.on(rekcah05(pattern=f"checkfilter2$", allow_sudo=True))
+@kyne.on(obsq(pattern=f"checkfilter2$", allow_sudo=True))
 async def filters_active(event):
     """ For .filters command, lists all of the active filters in a chat. """
     try:
