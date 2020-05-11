@@ -11,8 +11,8 @@ from telethon.tl import functions, types
 from time import sleep
 from telethon import events
 from telethon.utils import pack_bot_file_id
-from userbot.modules.sql_helper.obwelcome_sql import get_current_obwelcome_settings, \
-    add_obwelcome_setting, rm_obwelcome_setting, update_previous_obwelcome
+from userbot.modules.sql_helper.oqwelcome_sql import get_current_oqwelcome_settings, \
+    add_oqwelcome_setting, rm_oqwelcome_setting, update_previous_oqwelcome
 from telethon import events, utils
 from telethon.tl import types
 from userbot import BOTLOG, BOTLOG_CHATID, CMD_HELP, bot
@@ -74,7 +74,7 @@ import re
 from userbot.events import kyne3301
 from telethon import events, utils
 from telethon.tl import types
-from userbot.modules.sql_helper.obfilter_sql import get_filter, add_filter, remove_filter, get_all_obfilters, remove_all_obfilters
+from userbot.modules.sql_helper.oqfilter_sql import get_filter, add_filter, remove_filter, get_all_oqfilters, remove_all_oqfilters
 from userbot import BOTLOG, BOTLOG_CHATID, CMD_HELP, ANTI_SPAMBOT, ANTI_SPAMBOT_SHOUT, bot
 from telethon.errors import (BadRequestError, ChatAdminRequiredError,ImageProcessFailedError, PhotoCropSizeSmallError,UserAdminInvalidError)
 from telethon.errors.rpcerrorlist import (UserIdInvalidError,MessageTooLongError)
@@ -140,6 +140,6 @@ TYPE_DOCUMENT = 2
 
 
 
-global last_triggered_obfilters
-last_triggered_obfilters = {}  # pylint:disable=E0602
+global last_triggered_oqfilters
+last_triggered_oqfilters = {}  # pylint:disable=E0602
 #filters logic
