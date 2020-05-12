@@ -4,7 +4,7 @@ from asyncio import sleep
 from os import execl
 import sys
 import os
-from userbot import bot
+from userbot import bot as kyne
 from userbot.events import admin_cmd, command
 import io
 import heroku3
