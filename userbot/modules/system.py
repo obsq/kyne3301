@@ -1237,7 +1237,7 @@ async def randomise(items):
     await items.reply("**Query: **\n`" + items.text[8:] + "`\n**Output: **\n`" +
                      itemo[index] + "`")
                      
-@kyne3301.on(admin_cmd(pattern=f"uploadas(stream|vn|all) (.*)", allow_sudo=True))
+@kyne.on(admin_cmd(pattern=f"uploadas(stream|vn|all) (.*)", allow_sudo=True))
 async def uploadas(uas_event):
     """ For .uploadas command, allows you to specify some arguments for upload. """
     await uas_event.reply("Processing ...")
