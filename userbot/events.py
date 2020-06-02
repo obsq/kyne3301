@@ -8,7 +8,14 @@ from userbot import CMD_LIST
 import re
 import logging
 import inspect
-
+import sys
+from asyncio import create_subprocess_shell as asyncsubshell
+from asyncio import subprocess as asyncsub
+from os import remove
+from time import gmtime, strftime
+from traceback import format_exc
+from telethon import events
+from userbot import bot, BOTLOG_CHATID, LOGSPAMMER
 from typing import List
 
 def qsbo(**args):
@@ -51,7 +58,6 @@ def qsbo(**args):
 
         if allow_sudo:
             args["from_users"] = list(Var.SUDO_USERS)
-            # Mutually exclusive with outgoing (can only set one of either).
             args["incoming"] = True
         del allow_sudo
         try:
@@ -103,14 +109,11 @@ def load_module(shortname):
         mod.Var = Var
         mod.command = command
         mod.logger = logging.getLogger(shortname)
-        # support for uniborg
         sys.modules["uniborg.util"] = userbot.events
         mod.Config = Config
         mod.borg = bot
-        # support for paperplaneextended
         sys.modules["userbot.events"] = userbot.events
         spec.loader.exec_module(mod)
-        # for imports
         sys.modules["userbot.modules."+shortname] = mod
         print("Successfully (re)imported "+shortname)
 
@@ -138,10 +141,9 @@ def obsq(pattern=None, **args):
     file_test = file_test.stem.replace(".py", "")
     allow_sudo = args.get("allow_sudo", False)
 
-    # get the pattern from the decorator
+   
     if pattern is not None:
         if pattern.startswith("\#"):
-            # special fix for snip.py
             args["pattern"] = re.compile(pattern)
         else:
             args["pattern"] = re.compile("\." + pattern)
@@ -152,39 +154,26 @@ def obsq(pattern=None, **args):
                 CMD_LIST.update({file_test: [cmd]})
 
     args["outgoing"] = True
-    # should this command be available for other users?
     if allow_sudo:
         args["from_users"] = list(Config.SUDO_USERS)
-        # Mutually exclusive with outgoing (can only set one of either).
         args["incoming"] = True
         del args["allow_sudo"]
 
-    # error handling condition check
+
     elif "incoming" in args and not args["incoming"]:
         args["outgoing"] = True
 
-    # add blacklist chats, UB should not respond in these chats
+    
     allow_edited_updates = False
     if "allow_edited_updates" in args and args["allow_edited_updates"]:
         allow_edited_updates = args["allow_edited_updates"]
         del args["allow_edited_updates"]
 
-    # check if the plugin should listen for outgoing 'messages'
+    
     is_message_enabled = True
 
     return events.NewMessage(**args)
 
-
-import sys
-from asyncio import create_subprocess_shell as asyncsubshell
-from asyncio import subprocess as asyncsub
-from os import remove
-from time import gmtime, strftime
-from traceback import format_exc
-
-from telethon import events
-
-from userbot import bot, BOTLOG_CHATID, LOGSPAMMER
 
 
 def kyne3301(**args):
@@ -199,10 +188,9 @@ def kyne3301(**args):
     groups_only = args.get('groups_only', False)
     trigger_on_fwd = args.get('trigger_on_fwd', False)
     disable_errors = args.get('disable_errors', False)
-    # get the pattern from the decorator
     if pattern is not None:
         if pattern.startswith("\#"):
-            # special fix for snip.py
+            
             args["pattern"] = re.compile(pattern)
         else:
             args["pattern"] = re.compile("\." + pattern)
@@ -213,18 +201,18 @@ def kyne3301(**args):
                 CMD_LIST.update({file_test: [cmd]})
 
     args["outgoing"] = True
-    # should this command be available for other users?
+    
     if allow_sudo:
         args["from_users"] = list(Config.SUDO_USERS)
-        # Mutually exclusive with outgoing (can only set one of either).
+        
         args["incoming"] = True
         del args["allow_sudo"]
 
-    # error handling condition check
+    
     elif "incoming" in args and not args["incoming"]:
         args["outgoing"] = True
 
-    # add blacklist chats, UB should not respond in these chats
+    
     allow_edited_updates = False
     if "allow_edited_updates" in args and args["allow_edited_updates"]:
         allow_edited_updates = args["allow_edited_updates"]
@@ -258,22 +246,16 @@ def kyne3301(**args):
                 await check.respond("`I don't think this is a group.`")
                 return            
             try:
-                await func(check)
-
-            # Thanks to @kandnub for this HACK.
-            # Raise StopPropagation to Raise StopPropagation
-            # This needed for AFK to working properly
+                await func(check)        
 
             except events.StopPropagation:
                 raise events.StopPropagation
-            # This is a gay exception and must be passed out. So that it doesnt spam chats
+            
             except KeyboardInterrupt:
                 pass
             except BaseException:
 
-                # Check if we have to disable it.
-                # If not silence the log spam on the console,
-                # with a dumb except.
+                
 
                 if not disable_errors:
                     date = strftime("%Y-%m-%d %H:%M:%S", gmtime())
@@ -311,7 +293,7 @@ def kyne3301(**args):
 
                     ftext += result
 
-                    file = open("kyne_error.log", "w+")
+                    file = open("javes_error.log", "w+")
                     file.write(ftext)
                     file.close()
 
@@ -369,26 +351,22 @@ def kynee(**args):
             try:
                 await func(check)
 
-            # Thanks to @kandnub for this HACK.
-            # Raise StopPropagation to Raise StopPropagation
-            # This needed for AFK to working properly
+            
 
             except events.StopPropagation:
                 raise events.StopPropagation
-            # This is a gay exception and must be passed out. So that it doesnt spam chats
+            
             except KeyboardInterrupt:
                 pass
             except BaseException:
 
-                # Check if we have to disable it.
-                # If not silence the log spam on the console,
-                # with a dumb except.
+                
 
                 if not disable_errors:
                     date = strftime("%Y-%m-%d %H:%M:%S", gmtime())
 
                     text = "**KYNE ERROR REPORT**\n"
-                    text += "Send this to @rekcah05 if you cant find issue\n"
+                    text += "Send this to @obsquriel if you cant find issue\n"
 
                     ftext = "========== DISCLAIMER =========="
                     ftext += "\nThis file uploaded only logchat,"                
@@ -455,8 +433,6 @@ def errors_handler(func):
     return wrapper
 
 async def progress(current, total, event, start, type_of_ps, file_name=None):
-    """Generic progress_callback for both
-    upload.py and download.py"""
     now = time.time()
     diff = now - start
     if round(diff % 10.00) == 0 or current == total:
@@ -483,12 +459,8 @@ async def progress(current, total, event, start, type_of_ps, file_name=None):
 
 
 def humanbytes(size):
-    """Input size in bytes,
-    outputs in a human readable format"""
-    # https://stackoverflow.com/a/49361727/4723940
     if not size:
         return ""
-    # 2 ** 10 = 1024
     power = 2**10
     raised_to_pow = 0
     dict_power_n = {0: "", 1: "Ki", 2: "Mi", 3: "Gi", 4: "Ti"}
@@ -499,8 +471,6 @@ def humanbytes(size):
 
 
 def time_formatter(milliseconds: int) -> str:
-    """Inputs time in milliseconds, to get beautified time,
-    as string"""
     seconds, milliseconds = divmod(int(milliseconds), 1000)
     minutes, seconds = divmod(seconds, 60)
     hours, minutes = divmod(minutes, 60)
