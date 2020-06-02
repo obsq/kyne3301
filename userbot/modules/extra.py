@@ -2844,7 +2844,7 @@ async def _(event):
  reply_message = await event.get_reply_message()
  idd = reply_message.from_id
  if idd == 710844948:
-   await reply_message.reply(f"`{JAVES_NNAME}:` ** He is my master, I can't ** ")
+   await reply_message.reply(f"`{KYNE_NNAME}:` ** He is my master, I can't ** ")
  else:
     if event.fwd_from:
         return
@@ -3185,7 +3185,6 @@ def get_lst_of_files(input_directory, output_lst):
             return get_lst_of_files(current_file_name, output_lst)
         output_lst.append(current_file_name)
     return output_lst
-
 
 
 
