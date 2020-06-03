@@ -176,7 +176,7 @@ def obsq(pattern=None, **args):
 
 
 
-def kyne3301(**args):
+def kynee(**args):
     """ Register a new event. """
     stack = inspect.stack()
     previous_stack_frame = stack[1]
