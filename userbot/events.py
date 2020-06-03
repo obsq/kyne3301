@@ -15,7 +15,6 @@ from os import remove
 from time import gmtime, strftime
 from traceback import format_exc
 from telethon import events
-from userbot.utils import kyne3301
 from userbot import bot, BOTLOG_CHATID, LOGSPAMMER
 from typing import List
 
@@ -177,7 +176,7 @@ def obsq(pattern=None, **args):
 
 
 
-def kynee3301(**args):
+def kyne3301(**args):
     """ Register a new event. """
     stack = inspect.stack()
     previous_stack_frame = stack[1]
