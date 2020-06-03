@@ -2227,7 +2227,7 @@ async def leave(e):
         await e.edit("`You must Leaving dis Group kek!`")
 
 
-@javes05(outgoing=True, disable_errors=True, pattern="^!wtf$")
+@kyne3301(outgoing=True, disable_errors=True, pattern="^!wtf$")
 async def _(event):
 
     if event.fwd_from:
