@@ -9,13 +9,49 @@ from userbot import bot as kyne
 from userbot import CMD_HELP, ALIVE_NAME, PM_MESSAGE, KYNE_NAME, KYNE_MSG, ORI_MSG
 KYNE_NNAME = str(KYNE_NAME) if KYNE_NAME else str(KYNE_MSG)
  
-botusername = var.TG_BOT_USERNAME_BF_HER
+tgbotusername = var.TG_BOT_USER_NAME_BF_HER
 @kyne3301(outgoing=True, pattern="^!help(?: |$)(.*)")
 async def help(event):
-    """ For .help command,"""
-    args = event.pattern_match.group(1).lower()
-    if args == "text":
-        string = ""
+    """ For !help command"""
+    if not event.text[0].isalpha() and event.text[0] not in ("/", "#", "@"):
+        tgbotusername = Var.TG_BOT_USER_NAME_BF_HER
+        args = event.pattern_match.group(1)
+        if tgbotusername is None or input_str == "text":
+            string = ""
+            for i in CMD_HELP:
+                string += "🛡 " + i + "\n"
+                for iter_list in CMD_HELP[i]:
+                    string += "    `" + str(iter_list) + "`"
+                    string += "\n"
+                string += "\n"
+            if len(string) > 4095:
+                await borg.send_message(event.chat_id, "Do !help cammand")
+                await asyncio.sleep(5)
+            else:
+                await event.edit(string)
+        elif input_str:
+            if input_str in CMD_HELP:
+                string = "Commands found in {}:\n".format(input_str)
+                for i in CMD_HELP[input_str]:
+                    string += "    " + i
+                    string += "\n"
+                await event.edit(string)
+            else:
+                await event.edit(args + " is not a valid plugin!")
+        else:
+            help_string = f"`{KYNE_NNAME} :` --HELP MODULE-- "
+            results = await bot.inline_query(  # pylint:disable=E0602
+                tgbotusername,
+                help_string
+            )
+            await results[0].click(
+                event.chat_id,
+                reply_to=event.reply_to_msg_id,
+                hide_via=True
+            )
+            await event.delete()
+
+          
         
  
 
@@ -25,20 +61,44 @@ async def help(event):
 @kyne.on(obsq(pattern=f"help(?: |$)(.*)", allow_sudo=True))
 async def help(event):
     """ For .help command,"""
-    args = event.pattern_match.group(1).lower()
-    if args:
-        if args in CMD_HELP:
-            await event.reply(str(CMD_HELP[args]))
+    if not event.text[0].isalpha() and event.text[0] not in ("/", "#", "@"):
+        tgbotusername = Var.TG_BOT_USER_NAME_BF_HER
+        args = event.pattern_match.group(1)
+        if tgbotusername is None or input_str == "text":
+            string = ""
+            for i in CMD_HELP:
+                string += "🛡 " + i + "\n"
+                for iter_list in CMD_HELP[i]:
+                    string += "    `" + str(iter_list) + "`"
+                    string += "\n"
+                string += "\n"
+            if len(string) > 4095:
+                await borg.send_message(event.chat_id, "Do !help cammand")
+                await asyncio.sleep(5)
+            else:
+                await event.edit(string)
+        elif input_str:
+            if input_str in CMD_HELP:
+                string = "Commands found in {}:\n".format(input_str)
+                for i in CMD_HELP[input_str]:
+                    string += "    " + i
+                    string += "\n"
+                await event.edit(string)
+            else:
+                await event.edit(args + " is not a valid plugin!")
         else:
-            await event.reply("Please specify a valid module name.")
-    else:
-        await event.reply("Usage: !help <module name>\
-            \n Example - !help admin")
-        string = ""
-        for i in CMD_HELP:
-            string += "`" + str(i)
-            string += "`, "
-        await event.reply(string)
+            help_string = f"`{KYNE_NNAME} :` --HELP MODULE-- "
+            results = await bot.inline_query(  # pylint:disable=E0602
+                tgbotusername,
+                help_string
+            )
+            await results[0].click(
+                event.chat_id,
+                reply_to=event.reply_to_msg_id,
+                hide_via=True
+            )
+            await event.delete()
+
 
 
 
