@@ -9,7 +9,7 @@ from userbot import bot as kyne
 from userbot import CMD_HELP, ALIVE_NAME, PM_MESSAGE, KYNE_NAME, KYNE_MSG, ORI_MSG
 KYNE_NNAME = str(KYNE_NAME) if KYNE_NAME else str(KYNE_MSG)
  
-tgbotusername = var.TG_BOT_USER_NAME_BF_HER
+tgbotusername = Var.TG_BOT_USER_NAME_BF_HER
 @kyne3301(outgoing=True, pattern="^!help(?: |$)(.*)")
 async def help(event):
     """ For !help command"""
