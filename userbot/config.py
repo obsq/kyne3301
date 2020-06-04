@@ -85,3 +85,4 @@ class Development(config):
 
 
 
+Config = config
