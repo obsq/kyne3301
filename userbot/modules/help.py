@@ -1,10 +1,12 @@
 
-
+import sys
+from telethon import events, functions, __version__
 from userbot import CMD_HELP
 from userbot.events import kyne3301
 from userbot.events import obsq, command
 from userbot import bot as kyne
 
+from userbot import CMD_HELP, ALIVE_NAME, PM_MESSAGE, KYNE_NAME, KYNE_MSG, ORI_MSG
 KYNE_NNAME = str(KYNE_NAME) if KYNE_NAME else str(KYNE_MSG)
  
 
@@ -12,19 +14,9 @@ KYNE_NNAME = str(KYNE_NAME) if KYNE_NAME else str(KYNE_MSG)
 async def help(event):
     """ For .help command,"""
     args = event.pattern_match.group(1).lower()
-    if args:
-        if args in CMD_HELP:
-            await event.edit(str(CMD_HELP[args]))
-        else:
-            await event.edit("Please specify a valid module name.")
-    else:
-        await event.edit("Usage: !help <module name>\
-            \n Example - !help admin")
+    if args == "text":
         string = ""
-        for i in CMD_HELP:
-            string += "`" + str(i)
-            string += "`, "
-        await event.reply(string)
+        
  
 
 
