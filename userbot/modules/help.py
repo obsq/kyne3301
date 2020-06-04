@@ -32,10 +32,10 @@ async def help(event):
                 await asyncio.sleep(5)
             else:
                 await event.edit(string)
-        elif input_str:
-            if input_str in CMD_HELP:
-                string = "Commands found in {}:\n".format(input_str)
-                for i in CMD_HELP[input_str]:
+        elif args:
+            if args in CMD_HELP:
+                string = "Commands found in {}:\n".format(args)
+                for i in CMD_HELP[args]:
                     string += "    " + i
                     string += "\n"
                 await event.edit(string)
@@ -67,7 +67,7 @@ async def help(event):
     if not event.text[0].isalpha() and event.text[0] not in ("/", "#", "@"):
         tgbotusername = Var.TG_BOT_USER_NAME_BF_HER
         args = event.pattern_match.group(1)
-        if tgbotusername is None or input_str == "text":
+        if tgbotusername is None or args == "text":
             string = ""
             for i in CMD_HELP:
                 string += "🛡 " + i + "\n"
@@ -80,10 +80,10 @@ async def help(event):
                 await asyncio.sleep(5)
             else:
                 await event.edit(string)
-        elif input_str:
-            if input_str in CMD_HELP:
-                string = "Commands found in {}:\n".format(input_str)
-                for i in CMD_HELP[input_str]:
+        elif args:
+            if args in CMD_HELP:
+                string = "Commands found in {}:\n".format(args)
+                for i in CMD_HELP[args]:
                     string += "    " + i
                     string += "\n"
                 await event.edit(string)
