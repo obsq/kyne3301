@@ -5,6 +5,8 @@ from userbot.events import kyne3301
 from userbot.events import obsq, command
 from userbot import bot as kyne
 
+KYNE_NNAME = str(KYNE_NAME) if KYNE_NAME else str(KYNE_MSG)
+ 
 
 @kyne3301(outgoing=True, pattern="^!help(?: |$)(.*)")
 async def help(event):
