@@ -23,6 +23,10 @@
     "TELEGRAM_STRING_SESSION": {
       "description": "Get this value by running [python3 string_session.py] in Termux or heroku[IMPORTANT]"    
     },
+    "TG_BOT_USERNAME_BF_HER": {
+      "description": "Needed for inline buttons maker. Make a bot at http://telegram.dog/BotFather and get the username of your bot",
+      "value": ""
+    },
     "HEROKU_APIKEY": {
       "description": "very important for !update command to make kyne up-to-date , get it from 'https://dashboard.heroku.com/account.",
       "value": ""   
