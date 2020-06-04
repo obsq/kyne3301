@@ -6,6 +6,14 @@ import re
 from telethon import events, errors, custom
 from userbot import CMD_HELP
 import io
+from userbot import bot as kyne
+import os
+from config2 import Var as Config
+Var = Config
+
+from userbot import CMD_HELP, ALIVE_NAME, PM_MESSAGE, KYNE_NAME, KYNE_MSG, ORI_MSG
+KYNE_NNAME = str(KYNE_NAME) if KYNE_NAME else str(KYNE_MSG)
+
 
 if Var.TG_BOT_USER_NAME_BF_HER is not None and kyneee is not None:
     @kyneee.on(events.InlineQuery)  # pylint:disable=E0602
