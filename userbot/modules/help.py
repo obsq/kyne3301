@@ -6,8 +6,7 @@ from userbot.events import kyne3301
 from userbot.events import obsq, command
 from userbot import bot as kyne
 import os
-from config2 import Var as Config
-Var = Config
+from var import Var
 
 from userbot import CMD_HELP, ALIVE_NAME, PM_MESSAGE, KYNE_NAME, KYNE_MSG, ORI_MSG
 KYNE_NNAME = str(KYNE_NAME) if KYNE_NAME else str(KYNE_MSG)
