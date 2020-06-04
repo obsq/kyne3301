@@ -293,7 +293,7 @@ def kyne3301(**args):
 
                     ftext += result
 
-                    file = open("javes_error.log", "w+")
+                    file = open("kyne_error.log", "w+")
                     file.write(ftext)
                     file.close()
 
