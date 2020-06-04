@@ -43,7 +43,7 @@ async def help(event):
                 await event.edit(args + " is not a valid plugin!")
         else:
             help_string = f"`{KYNE_NNAME} :` --HELP MODULE-- "
-            results = await bot.inline_query(  # pylint:disable=E0602
+            results = await kyne.inline_query(  # pylint:disable=E0602
                 tgbotusername,
                 help_string
             )
@@ -91,7 +91,7 @@ async def help(event):
                 await event.edit(args + " is not a valid plugin!")
         else:
             help_string = f"`{KYNE_NNAME} :` --HELP MODULE-- "
-            results = await bot.inline_query(  # pylint:disable=E0602
+            results = await kyne.inline_query(  # pylint:disable=E0602
                 tgbotusername,
                 help_string
             )
