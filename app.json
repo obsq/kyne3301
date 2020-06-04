@@ -23,7 +23,7 @@
     "TELEGRAM_STRING_SESSION": {
       "description": "Get this value by running [python3 string_session.py] in Termux or heroku[IMPORTANT]"    
     },
-    "TG_BOT_USERNAME_BF_HER": {
+    "TG_BOT_USER_NAME_BF_HER": {
       "description": "Needed for inline buttons maker. Make a bot at http://telegram.dog/BotFather and get the username of your bot",
       "value": ""
     },
