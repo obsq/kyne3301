@@ -284,11 +284,9 @@ import io
 import urllib
 from urllib.request import urlopen
 import requests
-from bs4 import BeautifulSoup
 import re
 from telethon.tl.types import MessageMediaPhoto
 from PIL import Image
-from asyncio import sleep
 from pylast import User, WSError
 from re import sub
 from urllib import parse
@@ -309,19 +307,16 @@ from userbot import CMD_HELP, BOTLOG, BOTLOG_CHATID, DEFAULT_BIO, BIO_PREFIX, la
 from subprocess import PIPE
 from subprocess import run as runapp
 import pybase64
-from userbot import CMD_HELP
 from getpass import getuser
 from os import remove
 from sys import executable
 from userbot import CMD_HELP, BOTLOG, BOTLOG_CHATID
 from telethon import events, functions
-from userbot import CMD_HELP
 import sys
 from requests import get, post, exceptions
 import asyncio
 from userbot import BOTLOG, BOTLOG_CHATID, CMD_HELP, LOGS, TEMP_DOWNLOAD_DIRECTORY
 from os import popen
-import re
 import urllib.parse
 import json
 from random import choice, getrandbits, randint
@@ -329,12 +324,6 @@ from random import choice
 import requests
 from bs4 import BeautifulSoup
 from humanize import naturalsize
-import re
-from requests import get
-from bs4 import BeautifulSoup
-from userbot import CMD_HELP
-import datetime
-from telethon import events
 from telethon.errors.rpcerrorlist import YouBlockedUserError
 from telethon.tl.functions.account import UpdateNotifySettingsRequest
 from userbot import bot, CMD_HELP
@@ -357,7 +346,7 @@ start=t.time()
 
 AUTO_PP = os.environ.get(
     "AUTO_PP",
-    "https://telegra.ph/file/80c75a92b94a1c3a21eae.jpg")
+    "https://telegra.ph/file/f855653c5b6ed73c1f5bf.jpg")
 
 from userbot import CMD_HELP, ALIVE_NAME, PM_MESSAGE, KYNE_NAME, KYNE_MSG, ORI_MSG
 KYNE_NNAME = str(KYNE_NAME) if KYNE_NAME else str(KYNE_MSG)
