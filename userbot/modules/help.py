@@ -4,58 +4,54 @@ from telethon import events, functions, __version__
 from userbot import CMD_HELP
 from userbot.events import kyne3301
 from userbot.events import obsq, command
-from userbot import bot
+from userbot import bot as kyne
 import os
 from var import Var
 
 from userbot import CMD_HELP, ALIVE_NAME, PM_MESSAGE, KYNE_NAME, KYNE_MSG, ORI_MSG
 KYNE_NNAME = str(KYNE_NAME) if KYNE_NAME else str(KYNE_MSG)
  
-tgbotusername = Var.TG_BOT_USER_NAME_BF_HER
+
 @kyne3301(outgoing=True, pattern="^!help(?: |$)(.*)")
 async def help(event):
     """ For !help command"""
-    if not event.text[0].isalpha() and event.text[0] not in ("/", "#", "@"):
-        tgbotusername = Var.TG_BOT_USER_NAME_BF_HER
-        args = event.pattern_match.group(1)
-        if tgbotusername is None or args == "text":
-            string = ""
-            for i in CMD_HELP:
-                string += "🛡 " + i + "\n"
-                for iter_list in CMD_HELP[i]:
-                    string += "    `" + str(iter_list) + "`"
-                    string += "\n"
-                string += "\n"
-            if len(string) > 4095:
-                await borg.send_message(event.chat_id, "Do !help cammand")
-                await asyncio.sleep(5)
-            else:
-                await event.edit(string)
-        elif args:
-            if args in CMD_HELP:
-                string = "Commands found in {}:\n".format(args)
-                for i in CMD_HELP[args]:
-                    string += "    " + i
-                    string += "\n"
-                await event.edit(string)
-            else:
-                await event.edit(args + " is not a valid plugin!")
+    args = event.pattern_match.group(1).lower()
+    if args:
+        if args in CMD_HELP:
+            await event.edit(str(CMD_HELP[args]))
         else:
-            help_string = f"`{KYNE_NNAME} :` --HELP MODULE-- "
-            results = await bot.inline_query(  # pylint:disable=E0602
-                tgbotusername,
-                help_string
-            )
-            await results[0].click(
-                event.chat_id,
-                reply_to=event.reply_to_msg_id,
-                hide_via=True
-            )
-            await event.delete()
-
-          
-        
+            await event.edit("`{KYNE_NNAME} :` Please specify a valid module name.")
+    else:
+        await event.edit("Usage: !help <module name>\
+            \n Example - !help admin")
+        string = ""
+        for i in CMD_HELP:
+            string += "`" + str(i)
+            string += "`, "
+        await event.reply(string)
  
+
+
+
+
+@kyne.on(obsq(pattern=f"help(?: |$)(.*)", allow_sudo=True))
+async def help(event):
+    """ For .help command """
+    args = event.pattern_match.group(1).lower()
+    if args:
+        if args in CMD_HELP:
+            await event.reply(str(CMD_HELP[args]))
+        else:
+            await event.reply("`{KYNE_NNAME} :` Please specify a valid module name.")
+    else:
+        await event.reply("Usage: !help <module name>\
+            \n Example - .help admin")
+        string = ""
+        for i in CMD_HELP:
+            string += "`" + str(i)
+            string += "`, "
+        await event.reply(string)
+
 
 
 
@@ -212,6 +208,8 @@ CMD_HELP.update({
 \nUsage: convert user text to sticker like a sticker screenshot\
 \n\n!ss2\
 \nUsage: Convert picture to sticker\
+\n\n!ss3\
+\nUsage: Like ss2\
 \n\n!text\
 \nUsage: text to sticker\
 \n\n!text2\
@@ -267,8 +265,36 @@ CMD_HELP.update({
 
 
 CMD_HELP.update({
-    "others":
-    "comming soon!\
-    \n you can see other help commands in @kyne3301 for now\
+    "fun":
+    "!dick\
+    \n!penis\
+\n\n.lool\
+\nUsage : text style\
+\n\n.lol\
+\nUsage : text style pic\
+\n\n!cowsay\
+\nUsage : !cowsay {text}\
+\n\n.ml\
+\nUsage : .ml {text}\
+\n\n!abuse\
+\nUsage : abuse someone hard\
+\n\n!slap\
+\nUsage : slap someone with something\
+\n\n!fp\
+\nUsage : facepalm\
+\n\n!cry\
+\nUsage : text style crying imoji\
+\n\n!cp\
+\nUsage : Copypasta the famous meme\
+\n\n!vapor\
+\nUsage : Reply to a text message to feel the vapour\
+\n\n!style\
+\nUsage : Reply to a text message to zalgolify\
+\n\n!str\
+\nUsage : Reply to a text message to streach the given txt\
+\n\n!hi
+\nUsage : Different hi strings\
+\n\n!react
+\nUsage : Face reactions\
 "
 })
