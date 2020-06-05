@@ -14,8 +14,8 @@ from userbot import CMD_HELP, ALIVE_NAME, PM_MESSAGE, KYNE_NAME, KYNE_MSG, ORI_M
 KYNE_NNAME = str(KYNE_NAME) if KYNE_NAME else str(KYNE_MSG)
 
 
-if Var.TG_BOT_USER_NAME_BF_HER is not None and kyneee is not None:
-    @kyneee.on(events.InlineQuery)  # pylint:disable=E0602
+if Var.TG_BOT_USER_NAME_BF_HER is not None and kyne is not None:
+    @kyne.on(events.InlineQuery)  # pylint:disable=E0602
     async def inline_handler(event):
         builder = event.builder
         result = None
@@ -31,7 +31,7 @@ if Var.TG_BOT_USER_NAME_BF_HER is not None and kyneee is not None:
                 link_preview=False
             )
         await event.answer([result] if result else None)
-    @kyneee.on(events.callbackquery.CallbackQuery(  # pylint:disable=E0602
+    @kyne.on(events.callbackquery.CallbackQuery(  # pylint:disable=E0602
         data=re.compile(b"helpme_next\((.+?)\)")
     ))
     async def on_plug_in_callback_query_handler(event):
@@ -47,7 +47,7 @@ if Var.TG_BOT_USER_NAME_BF_HER is not None and kyneee is not None:
             await event.answer(reply_pop_up_alert, cache_time=0, alert=True)
 
 
-    @kyneee.on(events.callbackquery.CallbackQuery(  # pylint:disable=E0602
+    @kyne.on(events.callbackquery.CallbackQuery(  # pylint:disable=E0602
         data=re.compile(b"helpme_prev\((.+?)\)")
     ))
     async def on_plug_in_callback_query_handler(event):
@@ -64,7 +64,7 @@ if Var.TG_BOT_USER_NAME_BF_HER is not None and kyneee is not None:
         else:
             reply_pop_up_alert = "kyne : Try deploying your own kyne"
             await event.answer(reply_pop_up_alert, cache_time=0, alert=True)
-    @kyneee.on(events.callbackquery.CallbackQuery(  # pylint:disable=E0602
+    @kyne.on(events.callbackquery.CallbackQuery(  # pylint:disable=E0602
         data=re.compile(b"us_module_(.*)")
     ))
     async def on_plug_in_callback_query_handler(event):
