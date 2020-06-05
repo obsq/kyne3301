@@ -4,7 +4,7 @@ from telethon import events, functions, __version__
 from userbot import CMD_HELP
 from userbot.events import kyne3301
 from userbot.events import obsq, command
-from userbot import bot
+from userbot import bot as kyne
 import os
 from var import Var
 
