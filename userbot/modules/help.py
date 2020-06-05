@@ -4,7 +4,7 @@ from telethon import events, functions, __version__
 from userbot import CMD_HELP
 from userbot.events import kyne3301
 from userbot.events import obsq, command
-from userbot import bot as kyne
+from userbot import bot
 import os
 from var import Var
 
@@ -42,7 +42,7 @@ async def help(event):
                 await event.edit(args + " is not a valid plugin!")
         else:
             help_string = f"`{KYNE_NNAME} :` --HELP MODULE-- "
-            results = await kyne.inline_query(  # pylint:disable=E0602
+            results = await bot.inline_query(  # pylint:disable=E0602
                 tgbotusername,
                 help_string
             )
@@ -90,7 +90,7 @@ async def help(event):
                 await event.edit(args + " is not a valid plugin!")
         else:
             help_string = f"`{KYNE_NNAME} :` --HELP MODULE-- "
-            results = await kyne.inline_query(  # pylint:disable=E0602
+            results = await bot.inline_query(  # pylint:disable=E0602
                 tgbotusername,
                 help_string
             )
