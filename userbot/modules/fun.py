@@ -12,15 +12,9 @@ import io
 from random import randint, uniform
 from PIL import Image, ImageEnhance, ImageOps
 from telethon.tl.types import DocumentAttributeFilename
-from telethon import events
-from telethon import events
 import asyncio
 from collections import deque
 import time
-from telethon import events
-import asyncio
-import asyncio
-from telethon import events
 from telethon.tl.types import ChannelParticipantsAdmins
 import html
 from telethon.tl.functions.channels import EditBannedRequest
@@ -29,22 +23,12 @@ from userbot.events import kyne3301
 import logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__) #<<<<<<<<<<<<<<<<<<<<
-from asyncio import sleep
 from os import remove
-from collections import deque
-from random import randint
-from asyncio import sleep
-from telethon import events
-import asyncio
-import os
-from telethon import events
 import asyncio
 import os
 import sys
 import random
-from userbot.events import kyne3301
 import datetime
-from telethon import events
 from telethon.errors.rpcerrorlist import YouBlockedUserError
 from telethon.tl.functions.account import UpdateNotifySettingsRequest
 from userbot import bot, CMD_HELP
@@ -55,30 +39,12 @@ import datetime
 from telethon import events
 from telethon.errors.rpcerrorlist import YouBlockedUserError
 from telethon.tl.functions.account import UpdateNotifySettingsRequest
-from userbot import bot, CMD_HELP
 from os import execl
-import sys
-import os
-import datetime
-from telethon import events
-from telethon.errors.rpcerrorlist import YouBlockedUserError
-from telethon.tl.functions.account import UpdateNotifySettingsRequest
-import io
-import sys
 import json
 from userbot import BOTLOG, BOTLOG_CHATID, CMD_HELP, bot
 import requests
 from cowpy import cow
-from userbot import CMD_HELP
-from userbot.events import kyne3301
 from userbot.modules.group import get_user_from_event
-from telethon import events
-import asyncio
-from datetime import datetime
-import requests
-import json
-from telethon import events
-import asyncio
 from userbot import CMD_HELP, ALIVE_NAME, PM_MESSAGE, KYNE_NAME, KYNE_MSG, ORI_MSG
 KYNE_NNAME = str(KYNE_NAME) if KYNE_NAME else str(KYNE_MSG)
 
