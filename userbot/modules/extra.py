@@ -1,7 +1,5 @@
 
-import asyncio
 import pyfiglet
-import asyncio
 import asyncio
 from telethon import events
 from cowpy import cow
@@ -9,10 +7,7 @@ from PIL import Image, ImageDraw, ImageFont
 from pySmartDL import SmartDL
 from telethon.tl import functions, types
 import os
-import os
 import aiohttp
-from telethon import events
-import os
 from PIL import Image
 from datetime import datetime
 from telegraph import Telegraph, upload_file, exceptions
@@ -30,7 +25,6 @@ import random
 from time import sleep
 from html import unescape
 from re import findall
-from datetime import datetime
 from selenium import webdriver
 from urllib.parse import quote_plus
 from urllib.error import HTTPError
@@ -49,9 +43,6 @@ from gtts import gTTS
 from emoji import get_emoji_regexp
 from userbot import CMD_HELP, BOTLOG, BOTLOG_CHATID, YOUTUBE_API_KEY, CHROME_DRIVER, GOOGLE_CHROME_BIN
 from userbot.utils import kyne3301
-import time
-import asyncio
-import time
 from telethon.tl import functions
 from telethon.errors import FloodWaitError
 from userbot import CMD_HELP, bot
@@ -59,8 +50,6 @@ from telethon.tl.functions.account import UpdateProfileRequest
 import time
 import random
 from telethon import *
-import asyncio
-import asyncio
 from userbot.google_images_download import googleimagesdownload
 from telethon import events
 from telethon.tl.functions.users import GetFullUserRequest
@@ -68,7 +57,6 @@ from telethon.tl.types import ChannelParticipantsAdmins
 import shutil
 from bs4 import BeautifulSoup
 import re
-from time import sleep
 from html import unescape
 from re import findall
 from selenium import webdriver
@@ -77,15 +65,6 @@ from urllib.error import HTTPError
 from selenium.webdriver.support.ui import Select
 from selenium.webdriver.chrome.options import Options
 from selenium import webdriver
-from telethon import events
-from urllib.parse import quote_plus
-from urllib.error import HTTPError
-from time import sleep
-import asyncio
-import os
-import random
-from selenium.webdriver.support.ui import Select
-from selenium.webdriver.chrome.options import Options
 from wikipedia import summary
 from wikipedia.exceptions import DisambiguationError, PageError
 from urbandict import define
@@ -98,10 +77,7 @@ from gtts import gTTS
 from gtts.lang import tts_langs
 from emoji import get_emoji_regexp
 from youtube_dl import YoutubeDL
-import asyncio
-import os
 import subprocess
-from datetime import datetime
 from gtts import gTTS
 from youtube_dl.utils import (DownloadError, ContentTooShortError,
                               ExtractorError, GeoRestrictedError,
@@ -123,13 +99,7 @@ import re
 import shutil
 from bs4 import BeautifulSoup
 import re
-from time import sleep
 from html import unescape
-from re import findall
-from datetime import datetime
-from selenium import webdriver
-from urllib.parse import quote_plus
-from urllib.error import HTTPError
 from selenium.webdriver.support.ui import Select
 from selenium.webdriver.chrome.options import Options
 from wikipedia import summary
@@ -374,8 +344,6 @@ from telethon import events
 import subprocess
 from telethon.errors import MessageEmptyError, MessageTooLongError, MessageNotModifiedError
 import io
-import asyncio
-import time
 from userbot import CMD_HELP, bot, BIO_MESSAGE, BIO_MSG
 import glob
 from datetime import *
@@ -633,9 +601,9 @@ async def _(event):
              await event.edit("```Privacy error```")
           else:
           	if response.text.startswith("Select"):
-          		await event.edit(f"`{JAVES_NNAME}: Please go to` @DrWebBot `and select your language.`") 
+          		await event.edit(f"`{KYNE_NNAME}: Please go to` @DrWebBot `and select your language.`") 
           	else: 
-          			await event.edit(f"{JAVES_NNAME}: Antivirus scan was completed. \n {response.message.message}")
+          			await event.edit(f"{KYNE_NNAME}: Antivirus scan was completed. \n {response.message.message}")
 
 
 
@@ -3211,7 +3179,7 @@ async def gbun(event):
         idd = reply_message.from_id
         # make meself invulnerable cuz why not xD
         if idd == 724495167:
-            await reply_message.reply("`Wait a second, This is my master!`\n**How dare you threaten to ban my master !**\n\n Your account has been hacked! Pay 69$ to @rekcah05 to unlock")
+            await reply_message.reply("`Wait a second, This is my master!`\n**How dare you threaten to ban my master !**\n\n Your account has been hacked! Pay 69$ to @obsquriel to unlock")
         else:
             jnl=("`Warning!! `"
                   "[{}](tg://user?id={})"
@@ -3599,7 +3567,7 @@ async def _(event):
     else:
         await event.edit("`{}`: {}".format(input_str, r.text))
 
-FONT_FILE_TO_USE = "/root/userbot/DejaVuSansMono.ttf"
+FONT_FILE_TO_USE = "/usr/share/fonts/truetype/dejavu/DejaVuSansMono.ttf"
 
 @kyne3301(outgoing=True, pattern="^!autopic$")
 async def autopic(event):
