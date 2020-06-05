@@ -292,9 +292,9 @@ CMD_HELP.update({
 \nUsage : Reply to a text message to zalgolify\
 \n\n!str\
 \nUsage : Reply to a text message to streach the given txt\
-\n\n!hi
+\n\n!hi\
 \nUsage : Different hi strings\
-\n\n!react
+\n\n!react\
 \nUsage : Face reactions\
 "
 })
