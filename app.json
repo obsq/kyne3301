@@ -23,10 +23,6 @@
     "TELEGRAM_STRING_SESSION": {
       "description": "Get this value by running [python3 string_session.py] in Termux or heroku[IMPORTANT]"    
     },
-    "TG_BOT_USER_NAME_BF_HER": {
-      "description": "Needed for inline buttons maker. Make a bot at http://telegram.dog/BotFather and get the username of your bot",
-      "value": ""
-    },
     "HEROKU_APIKEY": {
       "description": "very important for !update command to make kyne up-to-date , get it from 'https://dashboard.heroku.com/account.",
       "value": ""   
@@ -45,7 +41,7 @@
     },
     "COUNTRY": {
       "description": "Set your Country to be used in the !time and !date commands.",
-      "value": "Sri Lanka",
+      "value": "India",
       "required": false
     },
     "TZ_NUMBER": {
@@ -66,12 +62,6 @@
     "OPEN_WEATHER_MAP_APPID": {
       "description": "need for !weather command, (API key)from https://api.openweathermap.org",
       "value": "Enter api here if you need ",
-      "required": false
-       
-    },
-    "BOTLOG": {
-      "description": "Recommed to true ,BOTLOG_CHATID must be filled correct if you set it true",
-      "value": "False",
       "required": false
     },
     "BOTLOG_CHATID": {
@@ -174,11 +164,7 @@
     "SUDO_USERS": {
       "description": "give sudo user's id , he can controll your kyne like groupmanaging bots!!",
       "value": "",
-      "required": false
-      
-      
-      
-      
+      "required": false 
       
     },
     "AFK_MESSAGE": {
