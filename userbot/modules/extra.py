@@ -3570,7 +3570,7 @@ async def autopic(event):
     while True:
         shutil.copy(downloaded_file_name, photo)
         im = Image.open(photo)
-        #file_test = im.rotate(counter, expand=False).save(photo, "PNG")
+        file_test = im.rotate(counter, expand=False).save(photo, "PNG")
         current_time = datetime.now().strftime(f" -------------- \n  Time: %H:%M \n  Date: %d.%m.%y \n -------------- ")
         img = Image.open(photo)
         drawn_text = ImageDraw.Draw(img)
@@ -3578,7 +3578,7 @@ async def autopic(event):
         drawn_text.text((150, 0), current_time, font=fnt, fill=(50, 0, 20))
         img.save(photo)
         file = await bot.upload_file(photo)  # pylint:disable=E0602
-        await event.reply(f"**{KYNE_NAME}**: `successfully set profile picture \nSleeping 60s.......`")
+        await event.reply(f"**{KYNE_NAME}**:` successfully set profile picture \nSleeping 60s.......`")
         try:
             await bot(functions.photos.UploadProfilePhotoRequest(  # pylint:disable=E0602
                 file
