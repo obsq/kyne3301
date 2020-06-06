@@ -19,6 +19,7 @@ from userbot import bot, BOTLOG_CHATID, LOGSPAMMER
 from typing import List
 
 def qsbo(**args):
+    args["func"] = lambda e: e.via_bot_id is None
     stack = inspect.stack()
     previous_stack_frame = stack[1]
     file_test = Path(previous_stack_frame.filename)
@@ -135,6 +136,7 @@ def remove_plugin(shortname):
         raise ValueError
 
 def obsq(pattern=None, **args):
+    args["func"] = lambda e: e.via_bot_id is None
     stack = inspect.stack()
     previous_stack_frame = stack[1]
     file_test = Path(previous_stack_frame.filename)
@@ -175,248 +177,54 @@ def obsq(pattern=None, **args):
     return events.NewMessage(**args)
 
 
-
 def kyne3301(**args):
     """ Register a new event. """
+    args["func"] = lambda e: e.via_bot_id is None
+
     stack = inspect.stack()
     previous_stack_frame = stack[1]
     file_test = Path(previous_stack_frame.filename)
     file_test = file_test.stem.replace(".py", "")
-    allow_sudo = args.get("allow_sudo", False)
     pattern = args.get('pattern', None)
-    disable_edited = args.get('disable_edited', False)
-    groups_only = args.get('groups_only', False)
-    trigger_on_fwd = args.get('trigger_on_fwd', False)
-    disable_errors = args.get('disable_errors', False)
-    if pattern is not None:
-        if pattern.startswith("\#"):
-            
-            args["pattern"] = re.compile(pattern)
-        else:
-            args["pattern"] = re.compile("\." + pattern)
-            cmd = "." + pattern
+    disable_edited = args.get('disable_edited', True)
+
+    if pattern is not None and not pattern.startswith('(?i)'):
+        args['pattern'] = '(?i)' + pattern
+
+    if "disable_edited" in args:
+        del args['disable_edited']
+    
+    reg = re.compile('(.*)')
+    if not pattern == None:
+        try:
+            cmd = re.search(reg, pattern)
+            try:
+                cmd = cmd.group(1).replace("$", "").replace("\\", "").replace("^", "")
+            except:
+                pass
+
             try:
                 CMD_LIST[file_test].append(cmd)
             except:
                 CMD_LIST.update({file_test: [cmd]})
-
-    args["outgoing"] = True
-    
-    if allow_sudo:
-        args["from_users"] = list(Config.SUDO_USERS)
-        
-        args["incoming"] = True
-        del args["allow_sudo"]
-
-    
-    elif "incoming" in args and not args["incoming"]:
-        args["outgoing"] = True
-
-    
-    allow_edited_updates = False
-    if "allow_edited_updates" in args and args["allow_edited_updates"]:
-        allow_edited_updates = args["allow_edited_updates"]
-        del args["allow_edited_updates"]
-
-    
-    if pattern is not None and not pattern.startswith('(?i)'):
-        args['pattern'] = '(?i)' + pattern
-
-    if "disable_edited" in args:
-        del args['disable_edited']
-
-    if "groups_only" in args:
-        del args['groups_only']
-
-    if "disable_errors" in args:
-        del args['disable_errors']
-
-    if "trigger_on_fwd" in args:
-        del args['trigger_on_fwd']
+        except:
+            pass
 
     def decorator(func):
-        async def wrapper(check):
-            if LOGSPAMMER:
-                send_to = BOTLOG_CHATID
-
-            if not trigger_on_fwd and check.fwd_from:
-                return
-
-            if groups_only and not check.is_group:
-                await check.respond("`I don't think this is a group.`")
-                return            
-            try:
-                await func(check)        
-
-            except events.StopPropagation:
-                raise events.StopPropagation
-            
-            except KeyboardInterrupt:
-                pass
-            except BaseException:
-
-                
-
-                if not disable_errors:
-                    date = strftime("%Y-%m-%d %H:%M:%S", gmtime())
-
-                    text = "**KYNE ERROR REPORT**\n"
-                    text += "Send this to @obsquriel if you cant find issue\n"
-
-                    ftext = "========== DISCLAIMER =========="
-                    ftext += "\nThis file uploaded only logchat,"                
-                    ftext += "\nreport to admin this error if you cant find any issue"
-                    ftext += "\n---------------------------------\n"
-                    ftext += "================================\n\n"
-                    ftext += "--------BEGIN LOG--------\n"
-                    ftext += "\nDate: " + date
-                    ftext += "\nChat ID: " + str(check.chat_id)
-                    ftext += "\nSender ID: " + str(check.sender_id)
-                    ftext += "\n\nEvent Trigger:\n"
-                    ftext += str(check.text)
-                    ftext += "\n\nTraceback info:\n"
-                    ftext += str(format_exc())
-                    ftext += "\n\nError text:\n"
-                    ftext += str(sys.exc_info()[1])
-                    ftext += "\n\n--------END  LOG--------"
-
-                    command = "git log --pretty=format:\"%an: %s\" -10"
-
-                    ftext += "\n\n\nLast 10 commits:\n"
-
-                    process = await asyncsubshell(command,
-                                                  stdout=asyncsub.PIPE,
-                                                  stderr=asyncsub.PIPE)
-                    stdout, stderr = await process.communicate()
-                    result = str(stdout.decode().strip()) \
-                        + str(stderr.decode().strip())
-
-                    ftext += result
-
-                    file = open("kyne_error.log", "w+")
-                    file.write(ftext)
-                    file.close()
-
-               
-                    
-                    await check.client.send_file(send_to,
-                                                 "kyne_error.log",
-                                                 caption=text)
-                    remove("kyne_error.log")
-            else:
-                pass
-                
         if not disable_edited:
-            bot.add_event_handler(wrapper, events.MessageEdited(**args))
-        bot.add_event_handler(wrapper, events.NewMessage(**args))
-        return wrapper
+            bot.add_event_handler(func, events.MessageEdited(**args))
+        bot.add_event_handler(func, events.NewMessage(**args))
+        try:
+            LOAD_PLUG[file_test].append(func)
+        except Exception as e:
+            LOAD_PLUG.update({file_test: [func]})
+
+        return func
 
     return decorator
-    
-def kynee(**args):
-    """ Register a new event. """
-    pattern = args.get('pattern', None)
-    disable_edited = args.get('disable_edited', False)
-    groups_only = args.get('groups_only', False)
-    trigger_on_fwd = args.get('trigger_on_fwd', False)
-    disable_errors = args.get('disable_errors', False)
-    
-    
-    if pattern is not None and not pattern.startswith('(?i)'):
-        args['pattern'] = '(?i)' + pattern
 
-    if "disable_edited" in args:
-        del args['disable_edited']
 
-    if "groups_only" in args:
-        del args['groups_only']
 
-    if "disable_errors" in args:
-        del args['disable_errors']
-
-    if "trigger_on_fwd" in args:
-        del args['trigger_on_fwd']
-
-    def decorator(func):
-        async def wrapper(check):
-            if LOGSPAMMER:
-                send_to = BOTLOG_CHATID
-
-            if not trigger_on_fwd and check.fwd_from:
-                return
-
-            if groups_only and not check.is_group:
-                await check.respond("`I don't think this is a group.`")
-                return            
-            try:
-                await func(check)
-
-            
-
-            except events.StopPropagation:
-                raise events.StopPropagation
-            
-            except KeyboardInterrupt:
-                pass
-            except BaseException:
-
-                
-
-                if not disable_errors:
-                    date = strftime("%Y-%m-%d %H:%M:%S", gmtime())
-
-                    text = "**KYNE ERROR REPORT**\n"
-                    text += "Send this to @obsquriel if you cant find issue\n"
-
-                    ftext = "========== DISCLAIMER =========="
-                    ftext += "\nThis file uploaded only logchat,"                
-                    ftext += "\nreport to admin this error if you cant find any issue"
-                    ftext += "\n---------------------------------\n"
-                    ftext += "================================\n\n"
-                    ftext += "--------BEGIN LOG--------\n"
-                    ftext += "\nDate: " + date
-                    ftext += "\nChat ID: " + str(check.chat_id)
-                    ftext += "\nSender ID: " + str(check.sender_id)
-                    ftext += "\n\nEvent Trigger:\n"
-                    ftext += str(check.text)
-                    ftext += "\n\nTraceback info:\n"
-                    ftext += str(format_exc())
-                    ftext += "\n\nError text:\n"
-                    ftext += str(sys.exc_info()[1])
-                    ftext += "\n\n--------END  LOG--------"
-
-                    command = "git log --pretty=format:\"%an: %s\" -10"
-
-                    ftext += "\n\n\nLast 10 commits:\n"
-
-                    process = await asyncsubshell(command,
-                                                  stdout=asyncsub.PIPE,
-                                                  stderr=asyncsub.PIPE)
-                    stdout, stderr = await process.communicate()
-                    result = str(stdout.decode().strip()) \
-                        + str(stderr.decode().strip())
-
-                    ftext += result
-
-                    file = open("kyne_error.log", "w+")
-                    file.write(ftext)
-                    file.close()
-
-               
-                    
-                    await check.client.send_file(send_to,
-                                                 "kyne_error.log",
-                                                 caption=text)
-                    remove("kyne_error.log")
-            else:
-                pass
-                
-        if not disable_edited:
-            bot.add_event_handler(wrapper, events.MessageEdited(**args))
-        bot.add_event_handler(wrapper, events.NewMessage(**args))
-        return wrapper
-
-    return decorator
 from userbot import bot    
 borg = bot
 admin_cmd = obsq
