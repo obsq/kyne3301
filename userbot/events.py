@@ -1,301 +1,134 @@
-from userbot import bot
-from telethon import events
-from var import Var
-from pathlib import Path
-from userbot.config import Config
-from userbot import LOAD_PLUG
-from userbot import CMD_LIST
-import re
-import logging
-import inspect
 import sys
 from asyncio import create_subprocess_shell as asyncsubshell
 from asyncio import subprocess as asyncsub
 from os import remove
 from time import gmtime, strftime
 from traceback import format_exc
+
 from telethon import events
-from userbot import bot, BOTLOG_CHATID, LOGSPAMMER
-from typing import List
 
-def qsbo(**args):
-    args["func"] = lambda e: e.via_bot_id is None
-    stack = inspect.stack()
-    previous_stack_frame = stack[1]
-    file_test = Path(previous_stack_frame.filename)
-    file_test = file_test.stem.replace(".py", "")
-    if 1 == 0:
-        return print("processing......")
-    else:
-        pattern = args.get("pattern", None)
-        allow_sudo = args.get("allow_sudo", None)
-        allow_edited_updates = args.get('allow_edited_updates', False)
-        args["incoming"] = args.get("incoming", False)
-        args["outgoing"] = True
-        if bool(args["incoming"]):
-            args["outgoing"] = False
-
-        try:
-            if pattern is not None and not pattern.startswith('(?i)'):
-                args['pattern'] = '(?i)' + pattern
-        except:
-            pass
-
-        reg = re.compile('(.*)')
-        if not pattern == None:
-            try:
-                cmd = re.search(reg, pattern)
-                try:
-                    cmd = cmd.group(1).replace("$", "").replace("\\", "").replace("^", "")
-                except:
-                    pass
-
-                try:
-                    CMD_LIST[file_test].append(cmd)
-                except:
-                    CMD_LIST.update({file_test: [cmd]})
-            except:
-                pass
-
-        if allow_sudo:
-            args["from_users"] = list(Var.SUDO_USERS)
-            args["incoming"] = True
-        del allow_sudo
-        try:
-            del args["allow_sudo"]
-        except:
-            pass
-
-        if "allow_edited_updates" in args:
-            del args['allow_edited_updates']
-
-        def decorator(func):
-            if allow_edited_updates:
-                bot.add_event_handler(func, events.MessageEdited(**args))
-            bot.add_event_handler(func, events.NewMessage(**args))
-            try:
-                LOAD_PLUG[file_test].append(func)
-            except:
-                LOAD_PLUG.update({file_test: [func]})
-            return func
-
-        return decorator
+from userbot import bot, PLUGIN_CHANNEL, PRIVATE_GROUP_ID
 
 
-def load_module(shortname):
-    if shortname.startswith("__"):
-        pass
-    elif shortname.endswith("_"):
-        import userbot.events
-        import sys
-        import importlib
-        from pathlib import Path
-        path = Path(f"userbot/modules/{shortname}.py")
-        name = "userbot.modules.{}".format(shortname)
-        spec = importlib.util.spec_from_file_location(name, path)
-        mod = importlib.util.module_from_spec(spec)
-        spec.loader.exec_module(mod)
-        print("Successfully (re)imported "+shortname)
-    else:
-        import userbot.events
-        import sys
-        import importlib
-        from pathlib import Path
-        path = Path(f"userbot/modules/{shortname}.py")
-        name = "userbot.modules.{}".format(shortname)
-        spec = importlib.util.spec_from_file_location(name, path)
-        mod = importlib.util.module_from_spec(spec)
-        mod.bot = bot
-        mod.tgbot = bot.tgbot
-        mod.Var = Var
-        mod.command = command
-        mod.logger = logging.getLogger(shortname)
-        sys.modules["uniborg.util"] = userbot.events
-        mod.Config = Config
-        mod.borg = bot
-        sys.modules["userbot.events"] = userbot.events
-        spec.loader.exec_module(mod)
-        sys.modules["userbot.modules."+shortname] = mod
-        print("Successfully (re)imported "+shortname)
-
-def remove_plugin(shortname):
-    try:
-        try:
-            for i in LOAD_PLUG[shortname]:
-                bot.remove_event_handler(i)
-            del LOAD_PLUG[shortname]
-
-        except:
-            name = f"userbot.modules.{shortname}"
-
-            for i in reversed(range(len(bot._event_builders))):
-                ev, cb = bot._event_builders[i]
-                if cb.__module__ == name:
-                    del bot._event_builders[i]
-    except:
-        raise ValueError
-
-def obsq(pattern=None, **args):
-    args["func"] = lambda e: e.via_bot_id is None
-    stack = inspect.stack()
-    previous_stack_frame = stack[1]
-    file_test = Path(previous_stack_frame.filename)
-    file_test = file_test.stem.replace(".py", "")
-    allow_sudo = args.get("allow_sudo", False)
-
-   
-    if pattern is not None:
-        if pattern.startswith("\#"):
-            args["pattern"] = re.compile(pattern)
-        else:
-            args["pattern"] = re.compile("\." + pattern)
-            cmd = "." + pattern
-            try:
-                CMD_LIST[file_test].append(cmd)
-            except:
-                CMD_LIST.update({file_test: [cmd]})
-
-    args["outgoing"] = True
-    if allow_sudo:
-        args["from_users"] = list(Config.SUDO_USERS)
-        args["incoming"] = True
-        del args["allow_sudo"]
-
-
-    elif "incoming" in args and not args["incoming"]:
-        args["outgoing"] = True
-
-    
-    allow_edited_updates = False
-    if "allow_edited_updates" in args and args["allow_edited_updates"]:
-        allow_edited_updates = args["allow_edited_updates"]
-        del args["allow_edited_updates"]
-
-    
-    is_message_enabled = True
-
-    return events.NewMessage(**args)
-
-
-def kyne3301(**args):
+def register(**args):
     """ Register a new event. """
-    args["func"] = lambda e: e.via_bot_id is None
-
-    stack = inspect.stack()
-    previous_stack_frame = stack[1]
-    file_test = Path(previous_stack_frame.filename)
-    file_test = file_test.stem.replace(".py", "")
     pattern = args.get('pattern', None)
-    disable_edited = args.get('disable_edited', True)
+    disable_edited = args.get('disable_edited', False)
+    groups_only = args.get('groups_only', True)
+    trigger_on_fwd = args.get('trigger_on_fwd', False)
+    trigger_on_inline = args.get('trigger_on_inline', False)
+    disable_errors = args.get('disable_errors', False)
 
     if pattern is not None and not pattern.startswith('(?i)'):
         args['pattern'] = '(?i)' + pattern
 
     if "disable_edited" in args:
         del args['disable_edited']
-    
-    reg = re.compile('(.*)')
-    if not pattern == None:
-        try:
-            cmd = re.search(reg, pattern)
-            try:
-                cmd = cmd.group(1).replace("$", "").replace("\\", "").replace("^", "")
-            except:
-                pass
 
-            try:
-                CMD_LIST[file_test].append(cmd)
-            except:
-                CMD_LIST.update({file_test: [cmd]})
-        except:
-            pass
+    if "groups_only" in args:
+        del args['groups_only']
+
+    if "disable_errors" in args:
+        del args['disable_errors']
+
+    if "trigger_on_fwd" in args:
+        del args['trigger_on_fwd']
+
+    if "trigger_on_inline" in args:
+        del args['trigger_on_inline']
 
     def decorator(func):
-        if not disable_edited:
-            bot.add_event_handler(func, events.MessageEdited(**args))
-        bot.add_event_handler(func, events.NewMessage(**args))
-        try:
-            LOAD_PLUG[file_test].append(func)
-        except Exception as e:
-            LOAD_PLUG.update({file_test: [func]})
+        async def wrapper(check):
+            if not PLUGIN_CHANNEL:
+                send_to = check.chat_id
+            else:
+                send_to = PRIVATE_GROUP_ID
 
-        return func
+            if not trigger_on_fwd and check.fwd_from:
+                return
+
+            if check.via_bot_id and not trigger_on_inline:
+                return
+
+            if groups_only and not check.is_group:
+                await check.respond("`I don't think this is a group.`")
+                return
+
+            try:
+                await func(check)
+
+            # Thanks to @kandnub for this HACK.
+            # Raise StopPropagation to Raise StopPropagation
+            # This needed for AFK to working properly
+
+            except events.StopPropagation:
+                raise events.StopPropagation
+            # This is a gay exception and must be passed out. So that it doesnt spam chats
+            except KeyboardInterrupt:
+                pass
+            except BaseException:
+
+                # Check if we have to disable it.
+                # If not silence the log spam on the console,
+                # with a dumb except.
+
+                if not disable_errors:
+                    date = strftime("%Y-%m-%d %H:%M:%S", gmtime())
+
+                    text = "**USERBOT ERROR REPORT**\n"
+                    text += "Nothing is logged except the fact of error and date\n"
+
+                    ftext = "========== DISCLAIMER =========="
+                    ftext += "\nThis file uploaded ONLY here,"
+                    ftext += "\nwe logged only fact of error and date,"
+                    ftext += "\nwe respect your privacy,"
+                    ftext += "\nyou may not report this error if you've"
+                    ftext += "\nany confidential data here, no one will see your data\n"
+                    ftext += "================================\n\n"
+                    ftext += "--------BEGIN USERBOT TRACEBACK LOG--------\n"
+                    ftext += "\nDate: " + date
+                    ftext += "\nChat ID: " + str(check.chat_id)
+                    ftext += "\nSender ID: " + str(check.sender_id)
+                    ftext += "\n\nEvent Trigger:\n"
+                    ftext += str(check.text)
+                    ftext += "\n\nTraceback info:\n"
+                    ftext += str(format_exc())
+                    ftext += "\n\nError text:\n"
+                    ftext += str(sys.exc_info()[1])
+                    ftext += "\n\n--------END USERBOT TRACEBACK LOG--------"
+
+                    command = "git log --pretty=format:\"%an: %s\" -10"
+
+                    ftext += "\n\n\nLast 10 commits:\n"
+
+                    process = await asyncsubshell(command,
+                                                  stdout=asyncsub.PIPE,
+                                                  stderr=asyncsub.PIPE)
+                    stdout, stderr = await process.communicate()
+                    result = str(stdout.decode().strip()) \
+                        + str(stderr.decode().strip())
+
+                    ftext += result
+
+                    file = open("error.log", "w+")
+                    file.write(ftext)
+                    file.close()
+
+                    if PLUGIN_CHANNEL:
+                        await check.respond("`Sorry, my userbot has some error.\
+                        \nThe error logs are stored in the userbot's log chat.`"
+                                            )
+
+                    await check.client.send_file(send_to,
+                                                 "error.log",
+                                                 caption=text)
+                    remove("error.log")
+            else:
+                pass
+
+        if not disable_edited:
+            bot.add_event_handler(wrapper, events.MessageEdited(**args))
+        bot.add_event_handler(wrapper, events.NewMessage(**args))
+        return wrapper
 
     return decorator
-
-
-
-from userbot import bot    
-borg = bot
-admin_cmd = obsq
-command = qsbo
-register = kyne3301
-
-
-def errors_handler(func):
-    async def wrapper(event):
-        try:
-            return await func(event)
-        except Exception:
-            pass
-    return wrapper
-
-async def progress(current, total, event, start, type_of_ps, file_name=None):
-    now = time.time()
-    diff = now - start
-    if round(diff % 10.00) == 0 or current == total:
-        percentage = current * 100 / total
-        speed = current / diff
-        elapsed_time = round(diff) * 1000
-        time_to_completion = round((total - current) / speed) * 1000
-        estimated_total_time = elapsed_time + time_to_completion
-        progress_str = "[{0}{1}]\nProgress: {2}%\n".format(
-            ''.join(["-" for i in range(math.floor(percentage / 5))]),
-            ''.join(["-" for i in range(20 - math.floor(percentage / 5))]),
-            round(percentage, 2))
-        tmp = progress_str + \
-            "{0} of {1}\nETA: {2}".format(
-                humanbytes(current),
-                humanbytes(total),
-                time_formatter(estimated_total_time)
-            )
-        if file_name:
-            await event.edit("{}\nFile Name: `{}`\n{}".format(
-                type_of_ps, file_name, tmp))
-        else:
-            await event.edit("{}\n{}".format(type_of_ps, tmp))
-
-
-def humanbytes(size):
-    if not size:
-        return ""
-    power = 2**10
-    raised_to_pow = 0
-    dict_power_n = {0: "", 1: "Ki", 2: "Mi", 3: "Gi", 4: "Ti"}
-    while size > power:
-        size /= power
-        raised_to_pow += 1
-    return str(round(size, 2)) + " " + dict_power_n[raised_to_pow] + "B"
-
-
-def time_formatter(milliseconds: int) -> str:
-    seconds, milliseconds = divmod(int(milliseconds), 1000)
-    minutes, seconds = divmod(seconds, 60)
-    hours, minutes = divmod(minutes, 60)
-    days, hours = divmod(hours, 24)
-    tmp = ((str(days) + " day(s), ") if days else "") + \
-        ((str(hours) + " hour(s), ") if hours else "") + \
-        ((str(minutes) + " minute(s), ") if minutes else "") + \
-        ((str(seconds) + " second(s), ") if seconds else "") + \
-        ((str(milliseconds) + " millisecond(s), ") if milliseconds else "")
-    return tmp[:-2]
-
-class Loader():
-    def __init__(self, func=None, **args):
-        self.Var = Var
-        bot.add_event_handler(func, events.NewMessage(**args))
-
-
-
-
-
