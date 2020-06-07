@@ -132,3 +132,8 @@ def register(**args):
         return wrapper
 
     return decorator
+
+borg = bot
+admin_cmd = obsq
+command = qsbo
+register = kyne3301
