@@ -47,7 +47,6 @@ if ENV:
         HEROKU_APPNAME = os.environ.get("HEROKU_APPNAME", None)
         UPSTREAM_REPO_URL = os.environ.get("UPSTREAM_REPO_URL","https://github.com/obsq/kyne3301")
         TELEGRAPH_SHORT_NAME = os.environ.get("TELEGRAPH_SHORT_NAME", "kyne")
-        CONSOLE_LOGGER_VERBOSE = sb(os.environ.get("CONSOLE_LOGGER_VERBOSE", "False"))
         TG_BOT_TOKEN_BF_HER = os.environ.get("TG_BOT_TOKEN_BF_HER", None)
         COUNTRY = str(os.environ.get("COUNTRY", ""))
         TZ_NUMBER = int(os.environ.get("TZ_NUMBER", 1))
