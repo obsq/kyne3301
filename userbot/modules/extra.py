@@ -344,9 +344,7 @@ counter = 0
 start=t.time()
 
 
-AUTO_PP = os.environ.get(
-    "AUTO_PP",
-    "https://telegra.ph/file/f855653c5b6ed73c1f5bf.jpg")
+AUTO_PP = os.environ.get("AUTO_PP","https://telegra.ph/file/f855653c5b6ed73c1f5bf.jpg")
 
 from userbot import CMD_HELP, ALIVE_NAME, PM_MESSAGE, KYNE_NAME, KYNE_MSG, ORI_MSG
 KYNE_NNAME = str(KYNE_NAME) if KYNE_NAME else str(KYNE_MSG)
